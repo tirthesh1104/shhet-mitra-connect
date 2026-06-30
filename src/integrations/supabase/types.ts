@@ -14,7 +14,301 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      community_posts: {
+        Row: {
+          author_name: string
+          body: string
+          created_at: string
+          id: string
+          title: string
+          upvotes: number
+          user_id: string
+          village: string | null
+        }
+        Insert: {
+          author_name?: string
+          body: string
+          created_at?: string
+          id?: string
+          title: string
+          upvotes?: number
+          user_id: string
+          village?: string | null
+        }
+        Update: {
+          author_name?: string
+          body?: string
+          created_at?: string
+          id?: string
+          title?: string
+          upvotes?: number
+          user_id?: string
+          village?: string | null
+        }
+        Relationships: []
+      }
+      community_replies: {
+        Row: {
+          author_name: string
+          body: string
+          created_at: string
+          id: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          author_name?: string
+          body: string
+          created_at?: string
+          id?: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          author_name?: string
+          body?: string
+          created_at?: string
+          id?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_replies_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "community_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crops: {
+        Row: {
+          area_acres: number | null
+          created_at: string
+          health_status: string
+          id: string
+          name: string
+          sown_at: string | null
+          user_id: string
+        }
+        Insert: {
+          area_acres?: number | null
+          created_at?: string
+          health_status?: string
+          id?: string
+          name: string
+          sown_at?: string | null
+          user_id: string
+        }
+        Update: {
+          area_acres?: number | null
+          created_at?: string
+          health_status?: string
+          id?: string
+          name?: string
+          sown_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      expense_logs: {
+        Row: {
+          amount_inr: number
+          category: string
+          created_at: string
+          crop_name: string
+          id: string
+          note: string | null
+          spent_on: string
+          user_id: string
+        }
+        Insert: {
+          amount_inr: number
+          category: string
+          created_at?: string
+          crop_name: string
+          id?: string
+          note?: string | null
+          spent_on?: string
+          user_id: string
+        }
+        Update: {
+          amount_inr?: number
+          category?: string
+          created_at?: string
+          crop_name?: string
+          id?: string
+          note?: string | null
+          spent_on?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      expert_queue: {
+        Row: {
+          created_at: string
+          id: string
+          scan_id: string | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          scan_id?: string | null
+          status?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          scan_id?: string | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "expert_queue_scan_id_fkey"
+            columns: ["scan_id"]
+            isOneToOne: false
+            referencedRelation: "scans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      outbreak_signals: {
+        Row: {
+          created_at: string
+          disease_key: string
+          id: string
+          village: string
+        }
+        Insert: {
+          created_at?: string
+          disease_key: string
+          id?: string
+          village: string
+        }
+        Update: {
+          created_at?: string
+          disease_key?: string
+          id?: string
+          village?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          full_name: string
+          id: string
+          language: string
+          onboarded: boolean
+          state: string
+          updated_at: string
+          village: string
+          voice_mode: boolean
+        }
+        Insert: {
+          created_at?: string
+          full_name?: string
+          id: string
+          language?: string
+          onboarded?: boolean
+          state?: string
+          updated_at?: string
+          village?: string
+          voice_mode?: boolean
+        }
+        Update: {
+          created_at?: string
+          full_name?: string
+          id?: string
+          language?: string
+          onboarded?: boolean
+          state?: string
+          updated_at?: string
+          village?: string
+          voice_mode?: boolean
+        }
+        Relationships: []
+      }
+      reminders: {
+        Row: {
+          created_at: string
+          done: boolean
+          due_date: string
+          id: string
+          kind: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          done?: boolean
+          due_date: string
+          id?: string
+          kind?: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          done?: boolean
+          due_date?: string
+          id?: string
+          kind?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      scans: {
+        Row: {
+          confidence: number
+          cost_estimate: number | null
+          created_at: string
+          crop_name: string
+          disease_key: string
+          id: string
+          image_url: string | null
+          sent_to_expert: boolean
+          severity: string
+          user_id: string
+          village: string | null
+          weather_snapshot: Json | null
+        }
+        Insert: {
+          confidence: number
+          cost_estimate?: number | null
+          created_at?: string
+          crop_name: string
+          disease_key: string
+          id?: string
+          image_url?: string | null
+          sent_to_expert?: boolean
+          severity: string
+          user_id: string
+          village?: string | null
+          weather_snapshot?: Json | null
+        }
+        Update: {
+          confidence?: number
+          cost_estimate?: number | null
+          created_at?: string
+          crop_name?: string
+          disease_key?: string
+          id?: string
+          image_url?: string | null
+          sent_to_expert?: boolean
+          severity?: string
+          user_id?: string
+          village?: string | null
+          weather_snapshot?: Json | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
