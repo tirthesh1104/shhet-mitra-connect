@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
-import { Home, Camera, BookOpen, Bell, Settings as Cog, Menu, Sprout, X, Languages } from "lucide-react";
+import { Home, Camera, BookOpen, ShoppingCart, Menu, Sprout, X, Languages, Bell } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { useI18n } from "@/lib/i18n";
 import { useVoiceMode } from "@/lib/voice-mode";
