@@ -48,22 +48,48 @@ function Landing() {
       {/* hero */}
       <section className="mx-auto grid max-w-5xl gap-10 px-5 pb-16 pt-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] md:items-center md:gap-12 md:pt-10">
         <div className="order-1 flex justify-center md:order-none">
-          {/* Fixed-position seedling hero illustration */}
-          <div className="relative aspect-square w-56 sm:w-72 md:w-full md:max-w-sm">
+          {/* Seedling hero with layered field/soil backdrop */}
+          <div className="relative aspect-square w-64 sm:w-80 md:w-full md:max-w-md">
+            {/* soft sky halo */}
             <div
               aria-hidden
-              className="absolute inset-0 -z-10 rounded-full"
+              className="absolute inset-0 -z-30 rounded-full"
               style={{
                 background:
-                  "radial-gradient(circle at 50% 60%, oklch(0.9 0.1 80 / 0.55), transparent 65%)",
+                  "radial-gradient(circle at 50% 40%, oklch(0.94 0.06 220 / 0.55), transparent 70%)",
               }}
             />
+            {/* warm sun glow behind seedling */}
+            <div
+              aria-hidden
+              className="absolute inset-0 -z-20 rounded-full"
+              style={{
+                background:
+                  "radial-gradient(circle at 50% 55%, oklch(0.92 0.14 85 / 0.7), transparent 60%)",
+              }}
+            />
+            {/* soil / field arc at the base */}
+            <div
+              aria-hidden
+              className="absolute inset-x-0 bottom-0 -z-10 h-2/5 rounded-b-full"
+              style={{
+                background:
+                  "radial-gradient(ellipse at 50% 100%, oklch(0.55 0.09 55) 0%, oklch(0.62 0.08 60) 45%, transparent 75%)",
+                boxShadow: "inset 0 -6px 12px oklch(0.4 0.06 50 / 0.35)",
+              }}
+            />
+            {/* subtle rolling field lines */}
+            <svg aria-hidden viewBox="0 0 400 400" className="absolute inset-0 -z-10 h-full w-full opacity-40">
+              <path d="M0 300 Q 100 260 200 290 T 400 280" fill="none" stroke="oklch(0.55 0.12 130)" strokeWidth="2" />
+              <path d="M0 330 Q 120 300 210 320 T 400 315" fill="none" stroke="oklch(0.5 0.1 130)" strokeWidth="2" />
+              <path d="M0 360 Q 140 340 220 355 T 400 350" fill="none" stroke="oklch(0.45 0.09 130)" strokeWidth="2" />
+            </svg>
             <img
               src={seedling}
               alt="A small green sprout emerging from a brown seed planted in soil, with a water droplet on its leaf"
               width={1024}
               height={1024}
-              className="h-full w-full select-none object-contain"
+              className="relative h-full w-full select-none object-contain drop-shadow-[0_10px_20px_oklch(0.4_0.06_50/0.25)]"
               draggable={false}
             />
           </div>
