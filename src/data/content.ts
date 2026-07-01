@@ -232,16 +232,17 @@ export const DEBT_TIPS: Array<{ title: BL; desc: BL }> = [
 ];
 
 export type SoilInput = { colour: string; texture: string; irrigation: string };
+type Level = "Low" | "Medium" | "High";
 export function analyseSoil(i: SoilInput): {
-  n: string; p: string; k: string; ph: string; recs: { brand: string; dose: string }[]; summary: BL;
+  n: Level; p: Level; k: Level; ph: string; recs: { brand: string; dose: string }[]; summary: BL;
 } {
   // simple deterministic mapping
   const isDark = i.colour === "dark";
   const isSticky = i.texture === "sticky";
   const isSandy = i.texture === "sandy";
-  const n = isDark ? "High" : isSandy ? "Low" : "Medium";
-  const p = isSticky ? "Medium" : isSandy ? "Low" : "Medium";
-  const k = isDark ? "High" : "Medium";
+  const n: Level = isDark ? "High" : isSandy ? "Low" : "Medium";
+  const p: Level = isSticky ? "Medium" : isSandy ? "Low" : "Medium";
+  const k: Level = isDark ? "High" : "Medium";
   const ph = isDark ? "6.8 – 7.4" : isSandy ? "6.0 – 6.6" : "6.4 – 7.0";
   const recs = [
     { brand: "Urea (46-0-0)", dose: n === "Low" ? "50 kg/acre" : n === "Medium" ? "30 kg/acre" : "20 kg/acre" },
