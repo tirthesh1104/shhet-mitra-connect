@@ -25,11 +25,12 @@ function Page() {
 
   useEffect(() => {
     if (!scanning || !readerRef.current) return;
-    let scanner: { clear: () => Promise<void> } | null = null;
+    let scanner: { clear: () => Promise<void>; render: (a: (t: string) => void, b: () => void) => void } | null = null;
     (async () => {
-      const { Html5QrcodeScanner } = await import("html5-qrcode");
-      scanner = new Html5QrcodeScanner("qr-reader", { fps: 10, qrbox: 220 }, false);
-      scanner.render(
+      const mod = await import("html5-qrcode");
+      const S = mod.Html5QrcodeScanner as unknown as new (id: string, cfg: { fps: number; qrbox: number }, verbose: boolean) => typeof scanner extends null ? never : NonNullable<typeof scanner>;
+      scanner = new S("qr-reader", { fps: 10, qrbox: 220 }, false);
+      scanner!.render(
         (text: string) => { setCode(text); verify(text); setScanning(false); scanner?.clear(); },
         () => { /* ignore per-frame errors */ }
       );
