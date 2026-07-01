@@ -60,16 +60,20 @@ export function AppShell({ children }: { children: ReactNode }) {
         {children}
       </main>
 
-      {/* Bottom nav (mobile-first) */}
+      {/* Bottom nav (mobile-first): Home | Scan | KhetBazaar | Journal | More */}
       <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/95 backdrop-blur">
         <div className="mx-auto grid max-w-3xl grid-cols-5">
           <BottomTab to="/app" icon={<Home />} label={t("dashboard")} active={location.pathname === "/app"} />
           <BottomTab to="/scan" icon={<Camera />} label={t("modScan")} active={location.pathname.startsWith("/scan")} />
+          <BottomTab to="/khetbazaar" icon={<ShoppingCart />} label={t("modKhetBazaar")} active={location.pathname === "/khetbazaar"} />
           <BottomTab to="/journal" icon={<BookOpen />} label={t("modJournal")} active={location.pathname === "/journal"} />
-          <BottomTab to="/community" icon={<Bell />} label={t("modCommunity")} active={location.pathname === "/community"} />
-          <BottomTab to="/settings" icon={<Cog />} label={t("settings")} active={location.pathname === "/settings"} />
+          <MoreTab active={drawerOpen} onClick={() => setDrawerOpen(true)} />
         </div>
       </nav>
+      {/* floating notifications shortcut */}
+      <Link to="/community" className="fixed bottom-20 right-4 z-20 grid h-11 w-11 place-items-center rounded-full bg-card shadow-[var(--shadow-warm)] border border-border" aria-label={t("modCommunity")}>
+        <Bell className="h-5 w-5" />
+      </Link>
 
       {/* Drawer for all modules */}
       {drawerOpen && (
