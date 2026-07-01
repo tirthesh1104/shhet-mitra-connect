@@ -118,3 +118,16 @@ function BottomTab({ to, icon, label, active }: { to: string; icon: ReactNode; l
     </button>
   );
 }
+
+function MoreTab({ active, onClick }: { active: boolean; onClick: () => void }) {
+  const { lang } = useI18n();
+  return (
+    <button
+      onClick={onClick}
+      className={`flex flex-col items-center justify-center gap-1 py-2.5 text-[11px] transition ${active ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}
+    >
+      <span className="grid h-7 w-7 place-items-center"><Menu /></span>
+      <span className="truncate px-1">{lang === "mr" ? "अधिक" : "More"}</span>
+    </button>
+  );
+}
