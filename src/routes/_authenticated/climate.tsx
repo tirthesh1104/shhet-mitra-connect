@@ -10,7 +10,7 @@ export const Route = createFileRoute("/_authenticated/climate")({ component: Pag
 
 function Page() {
   const { t, lang } = useI18n();
-  const wx = useQuery({ queryKey: ["weather"], queryFn: getForecast, staleTime: 10 * 60 * 1000 });
+  const wx = useQuery({ queryKey: ["weather"], queryFn: () => getForecast(), staleTime: 10 * 60 * 1000 });
   const rainTotal = (wx.data?.days ?? []).reduce((s, d) => s + d.rainMm, 0);
   const trend = rainTotal > 30 ? (lang === "mr" ? "अधिक पाऊस" : "Above avg rain") : rainTotal < 5 ? (lang === "mr" ? "कमी पाऊस" : "Below avg rain") : (lang === "mr" ? "सामान्य पाऊस" : "Normal rain");
   return (

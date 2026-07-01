@@ -22,7 +22,7 @@ function Page() {
   const [soil, setSoil] = useState("loamy");
   const [acres, setAcres] = useState("1");
   const [result, setResult] = useState<null | { freq: number; ltr: number; next: string; saved: number }>(null);
-  const wx = useQuery({ queryKey: ["weather"], queryFn: getForecast, staleTime: 10 * 60 * 1000 });
+  const wx = useQuery({ queryKey: ["weather"], queryFn: () => getForecast(), staleTime: 10 * 60 * 1000 });
 
   function compute() {
     const s = SOILS.find((x) => x.key === soil)!;
