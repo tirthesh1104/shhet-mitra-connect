@@ -247,7 +247,7 @@ export function analyseSoil(i: SoilInput): {
   const recs = [
     { brand: "Urea (46-0-0)", dose: n === "Low" ? "50 kg/acre" : n === "Medium" ? "30 kg/acre" : "20 kg/acre" },
     { brand: "SSP / DAP", dose: p === "Low" ? "50 kg/acre" : "30 kg/acre" },
-    { brand: "MOP (Potash)", dose: k === "Low" ? "40 kg/acre" : "25 kg/acre" },
+    { brand: "MOP (Potash)", dose: (k as Level) === "Low" ? "40 kg/acre" : "25 kg/acre" },
     { brand: "Compost / Vermicompost", dose: "1 – 2 ton/acre" },
   ];
   return { n, p, k, ph, recs, summary: {
