@@ -89,6 +89,8 @@ export type Database = {
           health_status: string
           id: string
           name: string
+          notes: string | null
+          soil_type: string | null
           sown_at: string | null
           user_id: string
         }
@@ -98,6 +100,8 @@ export type Database = {
           health_status?: string
           id?: string
           name: string
+          notes?: string | null
+          soil_type?: string | null
           sown_at?: string | null
           user_id: string
         }
@@ -107,6 +111,8 @@ export type Database = {
           health_status?: string
           id?: string
           name?: string
+          notes?: string | null
+          soil_type?: string | null
           sown_at?: string | null
           user_id?: string
         }
@@ -176,6 +182,125 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      fasal_calendar_events: {
+        Row: {
+          created_at: string
+          crop_id: string | null
+          event_date: string
+          event_type: string
+          id: string
+          note: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          crop_id?: string | null
+          event_date: string
+          event_type: string
+          id?: string
+          note?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          crop_id?: string | null
+          event_date?: string
+          event_type?: string
+          id?: string
+          note?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fasal_calendar_events_crop_id_fkey"
+            columns: ["crop_id"]
+            isOneToOne: false
+            referencedRelation: "crops"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      labour_listings: {
+        Row: {
+          created_at: string
+          date_needed: string | null
+          description: string | null
+          id: string
+          kind: string
+          offer_or_need: string
+          phone: string | null
+          poster_name: string
+          rate_per_day: number | null
+          user_id: string
+          village: string | null
+        }
+        Insert: {
+          created_at?: string
+          date_needed?: string | null
+          description?: string | null
+          id?: string
+          kind: string
+          offer_or_need: string
+          phone?: string | null
+          poster_name?: string
+          rate_per_day?: number | null
+          user_id: string
+          village?: string | null
+        }
+        Update: {
+          created_at?: string
+          date_needed?: string | null
+          description?: string | null
+          id?: string
+          kind?: string
+          offer_or_need?: string
+          phone?: string | null
+          poster_name?: string
+          rate_per_day?: number | null
+          user_id?: string
+          village?: string | null
+        }
+        Relationships: []
+      }
+      marketplace_listings: {
+        Row: {
+          created_at: string
+          crop_name: string
+          id: string
+          phone: string | null
+          price_per_qtl: number
+          quantity_qtl: number
+          seller_name: string
+          status: string
+          user_id: string
+          village: string | null
+        }
+        Insert: {
+          created_at?: string
+          crop_name: string
+          id?: string
+          phone?: string | null
+          price_per_qtl: number
+          quantity_qtl: number
+          seller_name?: string
+          status?: string
+          user_id: string
+          village?: string | null
+        }
+        Update: {
+          created_at?: string
+          crop_name?: string
+          id?: string
+          phone?: string | null
+          price_per_qtl?: number
+          quantity_qtl?: number
+          seller_name?: string
+          status?: string
+          user_id?: string
+          village?: string | null
+        }
+        Relationships: []
       }
       outbreak_signals: {
         Row: {
@@ -306,6 +431,72 @@ export type Database = {
           user_id?: string
           village?: string | null
           weather_snapshot?: Json | null
+        }
+        Relationships: []
+      }
+      seed_codes: {
+        Row: {
+          brand: string
+          code: string
+          created_at: string
+          crop: string
+          id: string
+          notes: string | null
+          status: string
+          variety: string
+        }
+        Insert: {
+          brand: string
+          code: string
+          created_at?: string
+          crop: string
+          id?: string
+          notes?: string | null
+          status?: string
+          variety: string
+        }
+        Update: {
+          brand?: string
+          code?: string
+          created_at?: string
+          crop?: string
+          id?: string
+          notes?: string | null
+          status?: string
+          variety?: string
+        }
+        Relationships: []
+      }
+      yield_estimates: {
+        Row: {
+          area_acres: number
+          created_at: string
+          crop_name: string
+          estimated_revenue_inr: number
+          estimated_yield_qtl: number
+          id: string
+          inputs: Json
+          user_id: string
+        }
+        Insert: {
+          area_acres: number
+          created_at?: string
+          crop_name: string
+          estimated_revenue_inr: number
+          estimated_yield_qtl: number
+          id?: string
+          inputs?: Json
+          user_id: string
+        }
+        Update: {
+          area_acres?: number
+          created_at?: string
+          crop_name?: string
+          estimated_revenue_inr?: number
+          estimated_yield_qtl?: number
+          id?: string
+          inputs?: Json
+          user_id?: string
         }
         Relationships: []
       }
