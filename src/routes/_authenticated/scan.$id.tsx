@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
-import { Volume2, VolumeX, BadgeCheck, AlertTriangle, IndianRupee, Stethoscope } from "lucide-react";
+import { Volume2, VolumeX, BadgeCheck, AlertTriangle, IndianRupee, Stethoscope, FileDown, Share2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { AppShell } from "@/components/app-shell";
@@ -9,6 +9,7 @@ import { useI18n } from "@/lib/i18n";
 import { speak, stopSpeaking } from "@/lib/voice-mode";
 import { DISEASES } from "@/data/diseases";
 import { useAuth } from "@/lib/auth-context";
+import { downloadReportPdf, shareReport } from "@/lib/pdf-report";
 
 export const Route = createFileRoute("/_authenticated/scan/$id")({
   component: ScanResult,
