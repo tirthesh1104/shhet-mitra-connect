@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
-import { Volume2, VolumeX, BadgeCheck, AlertTriangle, IndianRupee, Stethoscope } from "lucide-react";
+import { Volume2, VolumeX, BadgeCheck, AlertTriangle, IndianRupee, Stethoscope, FileDown, Share2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { AppShell } from "@/components/app-shell";
@@ -9,6 +9,7 @@ import { useI18n } from "@/lib/i18n";
 import { speak, stopSpeaking } from "@/lib/voice-mode";
 import { DISEASES } from "@/data/diseases";
 import { useAuth } from "@/lib/auth-context";
+import { downloadReportPdf, shareReport } from "@/lib/pdf-report";
 
 export const Route = createFileRoute("/_authenticated/scan/$id")({
   component: ScanResult,
@@ -91,8 +92,52 @@ function ScanResult() {
         {s.confidence < 60 && (
           <ExpertButton scanId={s.id} userId={user!.id} alreadySent={s.sent_to_expert} onSent={() => q.refetch()} />
         )}
+
+        <ReportActions scan={s} />
       </div>
     </AppShell>
+  );
+}
+
+function ReportActions({ scan }: { scan: Scan }) {
+  const { lang, t } = useI18n();
+  const { user } = useAuth();
+  const [busy, setBusy] = useState<"mr" | "en" | "share" | null>(null);
+
+  async function build(pdfLang: "mr" | "en") {
+    setBusy(pdfLang);
+    try {
+      const profile = (await supabase.from("profiles").select("full_name, village").eq("id", user!.id).maybeSingle()).data;
+      const blob = await downloadReportPdf({
+        farmerName: profile?.full_name ?? "", village: profile?.village ?? "",
+        date: new Date(scan.created_at).toLocaleDateString(),
+        cropName: scan.crop_name, imageDataUrl: scan.image_url,
+        diseaseKey: scan.disease_key, confidence: scan.confidence, severity: scan.severity,
+        costEstimate: scan.cost_estimate, lang: pdfLang,
+      });
+      return blob;
+    } finally { setBusy(null); }
+  }
+  return (
+    <div className="mt-4 flex flex-wrap gap-2">
+      <button disabled={!!busy} onClick={async () => { await build("mr"); toast.success(t("downloadPdf")); }} className="chip"><FileDown className="h-3.5 w-3.5" /> {busy === "mr" ? "..." : "मराठी PDF"}</button>
+      <button disabled={!!busy} onClick={async () => { await build("en"); toast.success(t("downloadPdf")); }} className="chip"><FileDown className="h-3.5 w-3.5" /> English PDF</button>
+      <button
+        disabled={!!busy}
+        onClick={async () => {
+          setBusy("share");
+          try {
+            const blob = await build(lang);
+            const r = await shareReport({
+              farmerName: "", village: "", date: new Date(scan.created_at).toLocaleDateString(),
+              cropName: scan.crop_name, diseaseKey: scan.disease_key, confidence: scan.confidence, severity: scan.severity, lang,
+            }, blob);
+            if (r === "copied") toast.success(lang === "mr" ? "सारांश कॉपी झाला" : "Summary copied");
+          } finally { setBusy(null); }
+        }}
+        className="chip"
+      ><Share2 className="h-3.5 w-3.5" /> {t("share")}</button>
+    </div>
   );
 }
 

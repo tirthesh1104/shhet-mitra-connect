@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedYieldRouteImport } from './routes/_authenticated/yield'
 import { Route as AuthenticatedSoilRouteImport } from './routes/_authenticated/soil'
 import { Route as AuthenticatedSideIncomeRouteImport } from './routes/_authenticated/side-income'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
@@ -30,6 +31,7 @@ import { Route as AuthenticatedDebtFreeRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedCommunityRouteImport } from './routes/_authenticated/community'
 import { Route as AuthenticatedClimateRouteImport } from './routes/_authenticated/climate'
 import { Route as AuthenticatedCarbonRouteImport } from './routes/_authenticated/carbon'
+import { Route as AuthenticatedCalendarRouteImport } from './routes/_authenticated/calendar'
 import { Route as AuthenticatedBeejRouteImport } from './routes/_authenticated/beej'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
 import { Route as AuthenticatedScanIdRouteImport } from './routes/_authenticated/scan.$id'
@@ -47,6 +49,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedYieldRoute = AuthenticatedYieldRouteImport.update({
+  id: '/yield',
+  path: '/yield',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedSoilRoute = AuthenticatedSoilRouteImport.update({
   id: '/soil',
@@ -138,6 +145,11 @@ const AuthenticatedCarbonRoute = AuthenticatedCarbonRouteImport.update({
   path: '/carbon',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedCalendarRoute = AuthenticatedCalendarRouteImport.update({
+  id: '/calendar',
+  path: '/calendar',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedBeejRoute = AuthenticatedBeejRouteImport.update({
   id: '/beej',
   path: '/beej',
@@ -159,6 +171,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/app': typeof AuthenticatedAppRoute
   '/beej': typeof AuthenticatedBeejRoute
+  '/calendar': typeof AuthenticatedCalendarRoute
   '/carbon': typeof AuthenticatedCarbonRoute
   '/climate': typeof AuthenticatedClimateRoute
   '/community': typeof AuthenticatedCommunityRoute
@@ -177,6 +190,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AuthenticatedSettingsRoute
   '/side-income': typeof AuthenticatedSideIncomeRoute
   '/soil': typeof AuthenticatedSoilRoute
+  '/yield': typeof AuthenticatedYieldRoute
   '/scan/$id': typeof AuthenticatedScanIdRoute
 }
 export interface FileRoutesByTo {
@@ -184,6 +198,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/app': typeof AuthenticatedAppRoute
   '/beej': typeof AuthenticatedBeejRoute
+  '/calendar': typeof AuthenticatedCalendarRoute
   '/carbon': typeof AuthenticatedCarbonRoute
   '/climate': typeof AuthenticatedClimateRoute
   '/community': typeof AuthenticatedCommunityRoute
@@ -202,6 +217,7 @@ export interface FileRoutesByTo {
   '/settings': typeof AuthenticatedSettingsRoute
   '/side-income': typeof AuthenticatedSideIncomeRoute
   '/soil': typeof AuthenticatedSoilRoute
+  '/yield': typeof AuthenticatedYieldRoute
   '/scan/$id': typeof AuthenticatedScanIdRoute
 }
 export interface FileRoutesById {
@@ -211,6 +227,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_authenticated/app': typeof AuthenticatedAppRoute
   '/_authenticated/beej': typeof AuthenticatedBeejRoute
+  '/_authenticated/calendar': typeof AuthenticatedCalendarRoute
   '/_authenticated/carbon': typeof AuthenticatedCarbonRoute
   '/_authenticated/climate': typeof AuthenticatedClimateRoute
   '/_authenticated/community': typeof AuthenticatedCommunityRoute
@@ -229,6 +246,7 @@ export interface FileRoutesById {
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/side-income': typeof AuthenticatedSideIncomeRoute
   '/_authenticated/soil': typeof AuthenticatedSoilRoute
+  '/_authenticated/yield': typeof AuthenticatedYieldRoute
   '/_authenticated/scan/$id': typeof AuthenticatedScanIdRoute
 }
 export interface FileRouteTypes {
@@ -238,6 +256,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/app'
     | '/beej'
+    | '/calendar'
     | '/carbon'
     | '/climate'
     | '/community'
@@ -256,6 +275,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/side-income'
     | '/soil'
+    | '/yield'
     | '/scan/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -263,6 +283,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/app'
     | '/beej'
+    | '/calendar'
     | '/carbon'
     | '/climate'
     | '/community'
@@ -281,6 +302,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/side-income'
     | '/soil'
+    | '/yield'
     | '/scan/$id'
   id:
     | '__root__'
@@ -289,6 +311,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_authenticated/app'
     | '/_authenticated/beej'
+    | '/_authenticated/calendar'
     | '/_authenticated/carbon'
     | '/_authenticated/climate'
     | '/_authenticated/community'
@@ -307,6 +330,7 @@ export interface FileRouteTypes {
     | '/_authenticated/settings'
     | '/_authenticated/side-income'
     | '/_authenticated/soil'
+    | '/_authenticated/yield'
     | '/_authenticated/scan/$id'
   fileRoutesById: FileRoutesById
 }
@@ -338,6 +362,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/yield': {
+      id: '/_authenticated/yield'
+      path: '/yield'
+      fullPath: '/yield'
+      preLoaderRoute: typeof AuthenticatedYieldRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/soil': {
       id: '/_authenticated/soil'
@@ -465,6 +496,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCarbonRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/calendar': {
+      id: '/_authenticated/calendar'
+      path: '/calendar'
+      fullPath: '/calendar'
+      preLoaderRoute: typeof AuthenticatedCalendarRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/beej': {
       id: '/_authenticated/beej'
       path: '/beej'
@@ -503,6 +541,7 @@ const AuthenticatedScanRouteWithChildren =
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAppRoute: typeof AuthenticatedAppRoute
   AuthenticatedBeejRoute: typeof AuthenticatedBeejRoute
+  AuthenticatedCalendarRoute: typeof AuthenticatedCalendarRoute
   AuthenticatedCarbonRoute: typeof AuthenticatedCarbonRoute
   AuthenticatedClimateRoute: typeof AuthenticatedClimateRoute
   AuthenticatedCommunityRoute: typeof AuthenticatedCommunityRoute
@@ -521,11 +560,13 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedSideIncomeRoute: typeof AuthenticatedSideIncomeRoute
   AuthenticatedSoilRoute: typeof AuthenticatedSoilRoute
+  AuthenticatedYieldRoute: typeof AuthenticatedYieldRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAppRoute: AuthenticatedAppRoute,
   AuthenticatedBeejRoute: AuthenticatedBeejRoute,
+  AuthenticatedCalendarRoute: AuthenticatedCalendarRoute,
   AuthenticatedCarbonRoute: AuthenticatedCarbonRoute,
   AuthenticatedClimateRoute: AuthenticatedClimateRoute,
   AuthenticatedCommunityRoute: AuthenticatedCommunityRoute,
@@ -544,6 +585,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedSideIncomeRoute: AuthenticatedSideIncomeRoute,
   AuthenticatedSoilRoute: AuthenticatedSoilRoute,
+  AuthenticatedYieldRoute: AuthenticatedYieldRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -557,13 +599,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

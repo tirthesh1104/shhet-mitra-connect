@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
-import { Home, Camera, BookOpen, Bell, Settings as Cog, Menu, Sprout, X, Languages } from "lucide-react";
+import { Home, Camera, BookOpen, ShoppingCart, Menu, Sprout, X, Languages, Bell } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { useI18n } from "@/lib/i18n";
 import { useVoiceMode } from "@/lib/voice-mode";
@@ -9,6 +9,8 @@ const MODULES: Array<{ to: string; key: Parameters<ReturnType<typeof useI18n>["t
   { to: "/scan", key: "modScan" },
   { to: "/journal", key: "modJournal" },
   { to: "/community", key: "modCommunity" },
+  { to: "/calendar", key: "modCalendar" },
+  { to: "/yield", key: "modYield" },
   { to: "/schemes", key: "modSchemes" },
   { to: "/side-income", key: "modSideIncome" },
   { to: "/forum", key: "modForum" },
@@ -58,16 +60,20 @@ export function AppShell({ children }: { children: ReactNode }) {
         {children}
       </main>
 
-      {/* Bottom nav (mobile-first) */}
+      {/* Bottom nav (mobile-first): Home | Scan | KhetBazaar | Journal | More */}
       <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/95 backdrop-blur">
         <div className="mx-auto grid max-w-3xl grid-cols-5">
           <BottomTab to="/app" icon={<Home />} label={t("dashboard")} active={location.pathname === "/app"} />
           <BottomTab to="/scan" icon={<Camera />} label={t("modScan")} active={location.pathname.startsWith("/scan")} />
+          <BottomTab to="/khetbazaar" icon={<ShoppingCart />} label={t("modKhetBazaar")} active={location.pathname === "/khetbazaar"} />
           <BottomTab to="/journal" icon={<BookOpen />} label={t("modJournal")} active={location.pathname === "/journal"} />
-          <BottomTab to="/community" icon={<Bell />} label={t("modCommunity")} active={location.pathname === "/community"} />
-          <BottomTab to="/settings" icon={<Cog />} label={t("settings")} active={location.pathname === "/settings"} />
+          <MoreTab active={drawerOpen} onClick={() => setDrawerOpen(true)} />
         </div>
       </nav>
+      {/* floating notifications shortcut */}
+      <Link to="/community" className="fixed bottom-20 right-4 z-20 grid h-11 w-11 place-items-center rounded-full bg-card shadow-[var(--shadow-warm)] border border-border" aria-label={t("modCommunity")}>
+        <Bell className="h-5 w-5" />
+      </Link>
 
       {/* Drawer for all modules */}
       {drawerOpen && (
@@ -109,6 +115,19 @@ function BottomTab({ to, icon, label, active }: { to: string; icon: ReactNode; l
     >
       <span className={`grid h-7 w-7 place-items-center ${active ? "scale-110" : ""}`}>{icon}</span>
       <span className="truncate px-1">{label}</span>
+    </button>
+  );
+}
+
+function MoreTab({ active, onClick }: { active: boolean; onClick: () => void }) {
+  const { lang } = useI18n();
+  return (
+    <button
+      onClick={onClick}
+      className={`flex flex-col items-center justify-center gap-1 py-2.5 text-[11px] transition ${active ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}
+    >
+      <span className="grid h-7 w-7 place-items-center"><Menu /></span>
+      <span className="truncate px-1">{lang === "mr" ? "अधिक" : "More"}</span>
     </button>
   );
 }

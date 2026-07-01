@@ -104,7 +104,22 @@ export const dict: Dict = {
   modScan: { mr: "रोग तपासणी", en: "Scan" },
   modJournal: { mr: "डायरी", en: "Journal" },
   modCommunity: { mr: "अलर्ट", en: "Alerts" },
+  modCalendar: { mr: "पीक कॅलेंडर", en: "Fasal Calendar" },
+  modYield: { mr: "उत्पन्न अंदाज", en: "Yield Estimate" },
+
+  // Phase 2 actions
+  edit: { mr: "बदला", en: "Edit" },
+  delete: { mr: "काढा", en: "Delete" },
+  cancel: { mr: "रद्द", en: "Cancel" },
+  save: { mr: "जतन", en: "Save" },
+  confirmDelete: { mr: "काढून टाकायचे?", en: "Delete this?" },
+  downloadPdf: { mr: "अहवाल डाउनलोड", en: "Download report" },
+  share: { mr: "पाठवा", en: "Share" },
+  addNew: { mr: "नवीन जोडा", en: "Add new" },
+  submit: { mr: "पाठवा", en: "Submit" },
+  loading: { mr: "लोड होत आहे...", en: "Loading..." },
 };
+
 
 type Ctx = {
   lang: Lang;
