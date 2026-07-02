@@ -2,9 +2,13 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Camera, Sprout, AlertTriangle, CloudRain, CloudSun, Plus, Bell, Trash2, Pencil, Calendar as CalIcon, Check, X } from "lucide-react";
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { AppShell } from "@/components/app-shell";
+import { OfflineBanner } from "@/components/offline-banner";
+import { ProfileScore } from "@/components/profile-score";
+import { DailyAdvisory } from "@/components/daily-advisory";
 import { useAuth } from "@/lib/auth-context";
 import { useI18n } from "@/lib/i18n";
 import { useVoiceMode } from "@/lib/voice-mode";
@@ -52,10 +56,14 @@ function Dashboard() {
 
   return (
     <AppShell>
+      <OfflineBanner />
       <WelcomeHeader name={profileQ.data?.full_name ?? ""} village={village} />
+      <ProfileScore profile={profileQ.data} cropsCount={cropsCountQ.data ?? 0} />
       <WeatherBanner />
+      <DailyAdvisory village={village} crop={cropsCountQ.data ? "mixed" : ""} weather="" />
       <OutbreakBanner village={village} />
       <RemindersStrip />
+
 
       <section className="mt-6">
         <div className="mb-3 flex items-center justify-between">
