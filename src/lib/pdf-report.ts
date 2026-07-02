@@ -167,7 +167,11 @@ export async function downloadReportPdf(r: ReportInput): Promise<Blob> {
   document.body.appendChild(container);
   try {
     const node = container.firstElementChild as HTMLElement;
-    const canvas = await html2canvas(node, { scale: 2, backgroundColor: "#FBF7EE", useCORS: true, logging: false });
+    sanitizeOklch(node); // rewrite any oklch(...) to hex so html2canvas can parse
+    const canvas = await html2canvas(node, {
+      scale: 2, backgroundColor: "#FBF7EE", useCORS: true, logging: false,
+      onclone: (_doc, clonedNode) => { try { sanitizeOklch(clonedNode as HTMLElement); } catch { /* noop */ } },
+    });
     const img = canvas.toDataURL("image/jpeg", 0.92);
     const pdf = new jsPDF({ unit: "pt", format: "a4" });
     const pageW = pdf.internal.pageSize.getWidth();
