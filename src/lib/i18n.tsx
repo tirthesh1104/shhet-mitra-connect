@@ -106,6 +106,7 @@ export const dict: Dict = {
   modCommunity: { mr: "अलर्ट", en: "Alerts" },
   modCalendar: { mr: "पीक कॅलेंडर", en: "Fasal Calendar" },
   modYield: { mr: "उत्पन्न अंदाज", en: "Yield Estimate" },
+  modWeatherHistory: { mr: "हवामान इतिहास", en: "Weather History" },
 
   // Phase 2 actions
   edit: { mr: "बदला", en: "Edit" },
