@@ -106,6 +106,7 @@ export const dict: Dict = {
   modCommunity: { mr: "अलर्ट", en: "Alerts" },
   modCalendar: { mr: "पीक कॅलेंडर", en: "Fasal Calendar" },
   modYield: { mr: "उत्पन्न अंदाज", en: "Yield Estimate" },
+  modWeatherHistory: { mr: "हवामान इतिहास", en: "Weather History" },
 
   // Phase 2 actions
   edit: { mr: "बदला", en: "Edit" },
@@ -131,15 +132,19 @@ type Ctx = {
 const I18nContext = createContext<Ctx | null>(null);
 
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Lang>(() => {
-    if (typeof window === "undefined") return "mr";
-    return (localStorage.getItem("fm:lang") as Lang) || "mr";
-  });
+  // Always start with "mr" so SSR and first client render match. Rehydrate from
+  // localStorage after mount to avoid hydration mismatch on public routes.
+  const [lang, setLangState] = useState<Lang>("mr");
 
   useEffect(() => {
-    if (typeof document !== "undefined") {
-      document.documentElement.lang = lang;
-    }
+    try {
+      const stored = localStorage.getItem("fm:lang") as Lang | null;
+      if (stored === "mr" || stored === "en") setLangState(stored);
+    } catch {}
+  }, []);
+
+  useEffect(() => {
+    if (typeof document !== "undefined") document.documentElement.lang = lang;
   }, [lang]);
 
   const setLang = (l: Lang) => {

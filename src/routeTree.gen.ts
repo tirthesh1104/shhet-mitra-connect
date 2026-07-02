@@ -13,6 +13,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedYieldRouteImport } from './routes/_authenticated/yield'
+import { Route as AuthenticatedWeatherHistoryRouteImport } from './routes/_authenticated/weather-history'
 import { Route as AuthenticatedSoilRouteImport } from './routes/_authenticated/soil'
 import { Route as AuthenticatedSideIncomeRouteImport } from './routes/_authenticated/side-income'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
@@ -55,6 +56,12 @@ const AuthenticatedYieldRoute = AuthenticatedYieldRouteImport.update({
   path: '/yield',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedWeatherHistoryRoute =
+  AuthenticatedWeatherHistoryRouteImport.update({
+    id: '/weather-history',
+    path: '/weather-history',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedSoilRoute = AuthenticatedSoilRouteImport.update({
   id: '/soil',
   path: '/soil',
@@ -190,6 +197,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AuthenticatedSettingsRoute
   '/side-income': typeof AuthenticatedSideIncomeRoute
   '/soil': typeof AuthenticatedSoilRoute
+  '/weather-history': typeof AuthenticatedWeatherHistoryRoute
   '/yield': typeof AuthenticatedYieldRoute
   '/scan/$id': typeof AuthenticatedScanIdRoute
 }
@@ -217,6 +225,7 @@ export interface FileRoutesByTo {
   '/settings': typeof AuthenticatedSettingsRoute
   '/side-income': typeof AuthenticatedSideIncomeRoute
   '/soil': typeof AuthenticatedSoilRoute
+  '/weather-history': typeof AuthenticatedWeatherHistoryRoute
   '/yield': typeof AuthenticatedYieldRoute
   '/scan/$id': typeof AuthenticatedScanIdRoute
 }
@@ -246,6 +255,7 @@ export interface FileRoutesById {
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/side-income': typeof AuthenticatedSideIncomeRoute
   '/_authenticated/soil': typeof AuthenticatedSoilRoute
+  '/_authenticated/weather-history': typeof AuthenticatedWeatherHistoryRoute
   '/_authenticated/yield': typeof AuthenticatedYieldRoute
   '/_authenticated/scan/$id': typeof AuthenticatedScanIdRoute
 }
@@ -275,6 +285,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/side-income'
     | '/soil'
+    | '/weather-history'
     | '/yield'
     | '/scan/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -302,6 +313,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/side-income'
     | '/soil'
+    | '/weather-history'
     | '/yield'
     | '/scan/$id'
   id:
@@ -330,6 +342,7 @@ export interface FileRouteTypes {
     | '/_authenticated/settings'
     | '/_authenticated/side-income'
     | '/_authenticated/soil'
+    | '/_authenticated/weather-history'
     | '/_authenticated/yield'
     | '/_authenticated/scan/$id'
   fileRoutesById: FileRoutesById
@@ -368,6 +381,13 @@ declare module '@tanstack/react-router' {
       path: '/yield'
       fullPath: '/yield'
       preLoaderRoute: typeof AuthenticatedYieldRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/weather-history': {
+      id: '/_authenticated/weather-history'
+      path: '/weather-history'
+      fullPath: '/weather-history'
+      preLoaderRoute: typeof AuthenticatedWeatherHistoryRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/soil': {
@@ -560,6 +580,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedSideIncomeRoute: typeof AuthenticatedSideIncomeRoute
   AuthenticatedSoilRoute: typeof AuthenticatedSoilRoute
+  AuthenticatedWeatherHistoryRoute: typeof AuthenticatedWeatherHistoryRoute
   AuthenticatedYieldRoute: typeof AuthenticatedYieldRoute
 }
 
@@ -585,6 +606,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedSideIncomeRoute: AuthenticatedSideIncomeRoute,
   AuthenticatedSoilRoute: AuthenticatedSoilRoute,
+  AuthenticatedWeatherHistoryRoute: AuthenticatedWeatherHistoryRoute,
   AuthenticatedYieldRoute: AuthenticatedYieldRoute,
 }
 

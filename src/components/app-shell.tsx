@@ -11,6 +11,7 @@ const MODULES: Array<{ to: string; key: Parameters<ReturnType<typeof useI18n>["t
   { to: "/community", key: "modCommunity" },
   { to: "/calendar", key: "modCalendar" },
   { to: "/yield", key: "modYield" },
+  { to: "/weather-history", key: "modWeatherHistory" },
   { to: "/schemes", key: "modSchemes" },
   { to: "/side-income", key: "modSideIncome" },
   { to: "/forum", key: "modForum" },
