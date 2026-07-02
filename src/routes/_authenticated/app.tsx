@@ -38,6 +38,15 @@ function Dashboard() {
     enabled: !!user, staleTime: 5 * 60 * 1000,
   });
 
+  const cropsCountQ = useQuery({
+    queryKey: ["crops-count", user?.id],
+    queryFn: async () => {
+      const { count } = await supabase.from("crops").select("id", { count: "exact", head: true }).eq("user_id", user!.id);
+      return count ?? 0;
+    },
+    enabled: !!user, staleTime: 60 * 1000,
+  });
+
   useEffect(() => {
     if (profileQ.data?.language && profileQ.data.language !== lang) {
       setLang(profileQ.data.language as "mr" | "en");
