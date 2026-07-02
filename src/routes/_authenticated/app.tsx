@@ -106,32 +106,48 @@ function WelcomeHeader({ name, village }: { name: string; village: string }) {
 }
 
 function WeatherBanner() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const q = useQuery({
     queryKey: ["weather"],
     queryFn: () => getForecast(),
-    staleTime: 10 * 60 * 1000,
-    refetchInterval: 10 * 60 * 1000, // auto-refresh every 10 min
+    staleTime: 30 * 60 * 1000,
+    refetchInterval: 30 * 60 * 1000, // auto-refresh every 30 min
   });
   if (q.isLoading || !q.data) return <div className="h-20 animate-pulse rounded-2xl bg-secondary/50" />;
   const w = q.data;
   const Icon = w.rainExpected ? CloudRain : CloudSun;
+  const hourly = w.hours.map((h) => ({
+    t: new Date(h.time).getHours() + "h",
+    temp: h.temp,
+  }));
   return (
-    <div className="mb-3 flex items-start gap-3 rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-soft)]">
-      <Icon className={`mt-0.5 h-6 w-6 ${w.rainExpected ? "text-blue-500" : "text-[var(--color-sun)]"}`} />
-      <div className="flex-1">
-        <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("weatherAlert")}</div>
-        <div className="deva mt-0.5 font-medium">{w.summary.mr}</div>
-        <div className="text-sm text-muted-foreground">{w.summary.en}</div>
-        <div className="mt-2 flex gap-3 text-xs text-muted-foreground">
-          {w.days.map((d) => (
-            <div key={d.date}>
-              <div>{new Date(d.date).toLocaleDateString(undefined, { weekday: "short" })}</div>
-              <div className="font-medium text-foreground">{d.tempMax}°/{d.tempMin}°</div>
-              {d.rainMm > 0 && <div className="text-blue-600">{d.rainMm}mm</div>}
-            </div>
-          ))}
+    <div className="mb-3 rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-soft)]">
+      <div className="flex items-start gap-3">
+        <Icon className={`mt-0.5 h-6 w-6 ${w.rainExpected ? "text-blue-500" : "text-[var(--color-sun)]"}`} />
+        <div className="flex-1">
+          <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("weatherAlert")}</div>
+          <div className="deva mt-0.5 font-medium">{w.summary.mr}</div>
+          <div className="text-sm text-muted-foreground">{w.summary.en}</div>
         </div>
+      </div>
+      <div className="mt-3 h-24">
+        <ResponsiveContainer>
+          <LineChart data={hourly}>
+            <XAxis dataKey="t" fontSize={9} interval={2} />
+            <YAxis fontSize={9} width={24} />
+            <Tooltip />
+            <Line type="monotone" dataKey="temp" stroke="var(--color-primary)" strokeWidth={2} dot={false} />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+      <div className="mt-2 flex gap-2 overflow-x-auto pb-1 text-[11px] text-muted-foreground">
+        {w.days.map((d) => (
+          <div key={d.date} className="min-w-[52px] rounded-lg bg-secondary/40 px-2 py-1 text-center">
+            <div>{new Date(d.date).toLocaleDateString(lang === "mr" ? "mr-IN" : "en-IN", { weekday: "short" })}</div>
+            <div className="font-medium text-foreground">{d.tempMax}°/{d.tempMin}°</div>
+            {d.rainMm > 0 && <div className="text-blue-600">{d.rainMm}mm</div>}
+          </div>
+        ))}
       </div>
     </div>
   );
