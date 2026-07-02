@@ -88,7 +88,7 @@ function Page() {
         <div className="mt-1 grid grid-cols-7 gap-1">
           {days.map((c, i) => {
             if (!c.d) return <div key={i} />;
-            const iso = c.d.toISOString().slice(0, 10);
+            const iso = toLocalIso(c.d);
             const evs = eventsByDate[iso] ?? [];
             const isSel = selected === iso;
             return (
