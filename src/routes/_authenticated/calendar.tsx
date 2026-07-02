@@ -20,14 +20,29 @@ const TYPE_COLOR: Record<string, string> = {
   note: "bg-muted-foreground",
 };
 
+const MR_MONTHS = ["जानेवारी","फेब्रुवारी","मार्च","एप्रिल","मे","जून","जुलै","ऑगस्ट","सप्टेंबर","ऑक्टोबर","नोव्हेंबर","डिसेंबर"];
+const EN_MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+// Format Date → "YYYY-MM-DD" in LOCAL timezone (toISOString is UTC and shifts in IST).
+function toLocalIso(d: Date) {
+  const y = d.getFullYear(); const m = String(d.getMonth() + 1).padStart(2, "0"); const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
 function Page() {
   const { t, lang } = useI18n(); const { user } = useAuth(); const qc = useQueryClient();
-  const [cursor, setCursor] = useState(() => { const d = new Date(); d.setDate(1); return d; });
+  const [cursor, setCursor] = useState(() => { const d = new Date(); return new Date(d.getFullYear(), d.getMonth(), 1); });
   const [selected, setSelected] = useState<string | null>(null);
   const [newEvent, setNewEvent] = useState<{ type: string; note: string }>({ type: "note", note: "" });
 
-  const monthStart = cursor.toISOString().slice(0, 10);
-  const monthEnd = new Date(cursor.getFullYear(), cursor.getMonth() + 1, 0).toISOString().slice(0, 10);
+  const year = cursor.getFullYear();
+  const month = cursor.getMonth();
+  // Correct day count per month — new Date(y, m+1, 0) is the last day of month m (handles leap Feb).
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const firstWeekday = new Date(year, month, 1).getDay(); // 0=Sun..6=Sat
+  const monthStart = toLocalIso(new Date(year, month, 1));
+  const monthEnd = toLocalIso(new Date(year, month, daysInMonth));
+
   const q = useQuery({
     queryKey: ["cal", user?.id, monthStart],
     enabled: !!user,
@@ -35,12 +50,11 @@ function Page() {
   });
 
   const days = useMemo(() => {
-    const first = new Date(cursor); const last = new Date(cursor.getFullYear(), cursor.getMonth() + 1, 0);
     const cells: { d: Date | null }[] = [];
-    for (let i = 0; i < first.getDay(); i++) cells.push({ d: null });
-    for (let i = 1; i <= last.getDate(); i++) cells.push({ d: new Date(cursor.getFullYear(), cursor.getMonth(), i) });
+    for (let i = 0; i < firstWeekday; i++) cells.push({ d: null });
+    for (let i = 1; i <= daysInMonth; i++) cells.push({ d: new Date(year, month, i) });
     return cells;
-  }, [cursor]);
+  }, [year, month, daysInMonth, firstWeekday]);
 
   const eventsByDate = useMemo(() => {
     const m: Record<string, Ev[]> = {};
@@ -58,15 +72,15 @@ function Page() {
     qc.invalidateQueries({ queryKey: ["cal", user?.id, monthStart] });
   }
 
-  const monthLabel = cursor.toLocaleDateString(lang === "mr" ? "mr-IN" : "en-IN", { month: "long", year: "numeric" });
+  const monthLabel = `${MR_MONTHS[month]} ${year} / ${EN_MONTHS[month]} ${year}`;
 
   return (
     <ModulePage title={t("modCalendar")} subtitle={lang === "mr" ? "पेरणी, फवारणी व अंतिम तारखा" : "Sowing, spraying & scheme deadlines"}>
       <Card>
         <div className="mb-2 flex items-center justify-between">
-          <button onClick={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() - 1, 1))} className="chip"><ChevronLeft className="h-4 w-4" /></button>
-          <div className="font-medium">{monthLabel}</div>
-          <button onClick={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1))} className="chip"><ChevronRight className="h-4 w-4" /></button>
+          <button onClick={() => setCursor(new Date(year, month - 1, 1))} className="chip" aria-label="Previous month"><ChevronLeft className="h-4 w-4" /></button>
+          <div className="text-center text-sm font-medium">{monthLabel}</div>
+          <button onClick={() => setCursor(new Date(year, month + 1, 1))} className="chip" aria-label="Next month"><ChevronRight className="h-4 w-4" /></button>
         </div>
         <div className="grid grid-cols-7 gap-1 text-center text-[11px] text-muted-foreground">
           {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((d) => <div key={d}>{d}</div>)}
