@@ -79,6 +79,84 @@ function section(title: string, body: string, bg = "#F3EEDC") {
 function sevBg(s: string) { return s === "high" ? "#F4C7C7" : s === "medium" ? "#FDF2CE" : "#DAECDD"; }
 function escape(s: string) { return String(s ?? "").replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]!)); }
 
+// ---- oklch → hex sanitizer ----------------------------------------------------
+// html2canvas ≤1.4 cannot parse CSS color functions like oklch()/oklab()/color().
+// The app's shadcn theme defines colors as oklch, so any computed style read from
+// the report DOM crashes with "Attempting to parse an unsupported color function
+// oklch". Fix: before rendering, walk every element in the report container, read
+// its computed color-ish properties, and inline a hex fallback so html2canvas never
+// sees the unsupported function.
+
+function clamp01(x: number) { return Math.min(1, Math.max(0, x)); }
+function srgbCompand(x: number) {
+  const s = x <= 0.0031308 ? 12.92 * x : 1.055 * Math.pow(x, 1 / 2.4) - 0.055;
+  return Math.round(clamp01(s) * 255);
+}
+function oklchToHex(L: number, C: number, hDeg: number, alpha = 1): string {
+  // Björn Ottosson's OKLab → linear sRGB, then compand to sRGB.
+  const h = (hDeg * Math.PI) / 180;
+  const a = C * Math.cos(h);
+  const b = C * Math.sin(h);
+  const l_ = L + 0.3963377774 * a + 0.2158037573 * b;
+  const m_ = L - 0.1055613458 * a - 0.0638541728 * b;
+  const s_ = L - 0.0894841775 * a - 1.2914855480 * b;
+  const l = l_ ** 3, m = m_ ** 3, s = s_ ** 3;
+  const r = +4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s;
+  const g = -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s;
+  const bl = -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s;
+  const hex = (n: number) => srgbCompand(n).toString(16).padStart(2, "0");
+  const base = `#${hex(r)}${hex(g)}${hex(bl)}`;
+  if (alpha >= 0.999) return base;
+  return `${base}${Math.round(clamp01(alpha) * 255).toString(16).padStart(2, "0")}`;
+}
+function parseOklchToken(token: string): string | null {
+  // Accepts "oklch(L C H)" / "oklch(L C H / A)" with L as % or 0..1, H in deg, C as number.
+  const m = token.match(/oklch\(\s*([^)]+)\)/i);
+  if (!m) return null;
+  const inner = m[1].replace("/", " / ");
+  const parts = inner.split(/[\s,]+/).filter(Boolean);
+  const slash = parts.indexOf("/");
+  const nums = (slash >= 0 ? parts.slice(0, slash) : parts).slice(0, 3);
+  const alphaTok = slash >= 0 ? parts[slash + 1] : undefined;
+  if (nums.length < 3) return null;
+  const toNum = (s: string) => (s.endsWith("%") ? parseFloat(s) / 100 : parseFloat(s));
+  const L = toNum(nums[0]);
+  const C = parseFloat(nums[1]);
+  const H = parseFloat(nums[2]);
+  const A = alphaTok ? (alphaTok.endsWith("%") ? parseFloat(alphaTok) / 100 : parseFloat(alphaTok)) : 1;
+  if ([L, C, H, A].some((v) => Number.isNaN(v))) return null;
+  return oklchToHex(L, C, H, A);
+}
+function replaceOklchInValue(v: string): string {
+  if (!v || !/oklch\(/i.test(v)) return v;
+  return v.replace(/oklch\([^)]+\)/gi, (t) => parseOklchToken(t) ?? "#000000");
+}
+const COLOR_PROPS = [
+  "color", "backgroundColor", "borderColor", "borderTopColor", "borderRightColor",
+  "borderBottomColor", "borderLeftColor", "outlineColor", "textDecorationColor",
+  "fill", "stroke", "caretColor", "columnRuleColor",
+];
+function sanitizeOklch(root: HTMLElement) {
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT);
+  const nodes: HTMLElement[] = [root];
+  let n = walker.nextNode();
+  while (n) { nodes.push(n as HTMLElement); n = walker.nextNode(); }
+  for (const el of nodes) {
+    const cs = window.getComputedStyle(el);
+    for (const p of COLOR_PROPS) {
+      const raw = cs.getPropertyValue(p as string);
+      if (raw && /oklch\(/i.test(raw)) {
+        (el.style as unknown as Record<string, string>)[p] = replaceOklchInValue(raw);
+      }
+    }
+    // background shorthand can also carry oklch
+    const bg = cs.getPropertyValue("background-image");
+    if (bg && /oklch\(/i.test(bg)) el.style.backgroundImage = replaceOklchInValue(bg);
+    const bs = cs.getPropertyValue("box-shadow");
+    if (bs && /oklch\(/i.test(bs)) el.style.boxShadow = replaceOklchInValue(bs);
+  }
+}
+
 /** Generate and download a PDF report. Renders bilingual HTML → canvas → PDF. */
 export async function downloadReportPdf(r: ReportInput): Promise<Blob> {
   const container = document.createElement("div");
