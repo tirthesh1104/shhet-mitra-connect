@@ -15,11 +15,19 @@ export const Route = createFileRoute("/_authenticated/scan/$id")({
   component: ScanResult,
 });
 
+type AiAnalysis = {
+  crop: string; disease: string; isHealthy: boolean;
+  confidenceLevel: "high" | "medium" | "low"; confidencePercent: number;
+  symptoms: string[]; organicTreatment: string[]; chemicalTreatment: string[];
+  prevention: string[]; needsExpert: boolean; notes: string;
+} | null;
+
 type Scan = {
   id: string; crop_name: string; image_url: string | null;
   disease_key: string; confidence: number; severity: string;
   cost_estimate: number | null; sent_to_expert: boolean;
   created_at: string;
+  ai_analysis: AiAnalysis;
 };
 
 function ScanResult() {
