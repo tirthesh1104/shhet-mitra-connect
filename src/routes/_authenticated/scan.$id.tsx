@@ -63,6 +63,8 @@ function ScanResult() {
 
       {s.image_url && <HeatmapImage src={s.image_url} severity={s.severity as "low" | "medium" | "high"} />}
 
+      {s.ai_analysis && <AiDiagnosisCard ai={s.ai_analysis} lang={lang} />}
+
       <div className="mt-4 rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-soft)]">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
