@@ -37,41 +37,55 @@ function ScanPage() {
   const [busy, setBusy] = useState(false);
   const [cropName, setCropName] = useState("");
 
+  const analyze = useServerFn(analyzeCropImage);
+
   async function handleFile(f: File) {
     if (!f) return;
     setBusy(true);
     try {
       const dataUrl = await downscaleToDataUrl(f);
-      const [detection, weather, profile] = await Promise.all([
+      const [detection, weather, profile, aiResult] = await Promise.all([
         detectDisease(f),
         getForecast(),
         supabase.from("profiles").select("village").eq("id", user!.id).maybeSingle(),
+        analyze({ data: { imageDataUrl: dataUrl, cropHint: cropName.trim(), lang } }).catch(() => null),
       ]);
       const village = profile.data?.village ?? "";
+      const ai = aiResult?.diagnosis ?? null;
+
+      // Prefer AI values when available
+      const confidence = ai
+        ? ai.confidencePercent
+        : detection.confidence;
+      const severity: "low" | "medium" | "high" = ai
+        ? (ai.isHealthy ? "low" : ai.confidenceLevel === "high" ? "high" : ai.confidenceLevel === "medium" ? "medium" : "low")
+        : detection.severity;
       const cost = Math.round(
         (detection.disease.costRange[0] + detection.disease.costRange[1]) / 2,
       );
 
       const { data: inserted, error } = await supabase.from("scans").insert({
         user_id: user!.id,
-        crop_name: cropName.trim() || "Unknown",
+        crop_name: (ai?.crop || cropName.trim() || "Unknown"),
         image_url: dataUrl,
         disease_key: detection.disease.key,
-        confidence: detection.confidence,
-        severity: detection.severity,
+        confidence,
+        severity,
         weather_snapshot: { rainExpected: weather.rainExpected, days: weather.days, source: weather.source },
         village,
         cost_estimate: cost,
+        ai_analysis: ai as unknown as never,
       }).select("id").single();
       if (error) throw error;
 
-      // Log community outbreak signal (skip "healthy")
-      if (village && detection.disease.key !== "healthy") {
+      // Log community outbreak signal (skip healthy)
+      const notHealthy = ai ? !ai.isHealthy : detection.disease.key !== "healthy";
+      if (village && notHealthy) {
         await supabase.from("outbreak_signals").insert({ village, disease_key: detection.disease.key });
       }
       // Update crop health if matches a known crop
       if (cropName.trim()) {
-        const health = detection.disease.key === "healthy" ? "healthy" : detection.severity === "high" ? "urgent" : "minor";
+        const health = !notHealthy ? "healthy" : severity === "high" ? "urgent" : "minor";
         await supabase.from("crops").update({ health_status: health }).eq("user_id", user!.id).eq("name", cropName.trim());
       }
 
