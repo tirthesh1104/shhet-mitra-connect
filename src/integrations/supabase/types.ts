@@ -263,6 +263,45 @@ export type Database = {
         }
         Relationships: []
       }
+      mandi_prices: {
+        Row: {
+          arrival_date: string
+          commodity: string
+          district: string
+          fetched_at: string
+          id: string
+          market: string
+          max_price: number | null
+          min_price: number | null
+          modal_price: number | null
+          state: string
+        }
+        Insert: {
+          arrival_date: string
+          commodity: string
+          district: string
+          fetched_at?: string
+          id?: string
+          market: string
+          max_price?: number | null
+          min_price?: number | null
+          modal_price?: number | null
+          state?: string
+        }
+        Update: {
+          arrival_date?: string
+          commodity?: string
+          district?: string
+          fetched_at?: string
+          id?: string
+          market?: string
+          max_price?: number | null
+          min_price?: number | null
+          modal_price?: number | null
+          state?: string
+        }
+        Relationships: []
+      }
       marketplace_listings: {
         Row: {
           created_at: string
@@ -391,6 +430,7 @@ export type Database = {
       }
       scans: {
         Row: {
+          ai_analysis: Json | null
           confidence: number
           cost_estimate: number | null
           created_at: string
@@ -405,6 +445,7 @@ export type Database = {
           weather_snapshot: Json | null
         }
         Insert: {
+          ai_analysis?: Json | null
           confidence: number
           cost_estimate?: number | null
           created_at?: string
@@ -419,6 +460,7 @@ export type Database = {
           weather_snapshot?: Json | null
         }
         Update: {
+          ai_analysis?: Json | null
           confidence?: number
           cost_estimate?: number | null
           created_at?: string
