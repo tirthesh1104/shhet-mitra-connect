@@ -151,6 +151,74 @@ function ReportActions({ scan }: { scan: Scan }) {
   );
 }
 
+function AiDiagnosisCard({ ai, lang }: { ai: NonNullable<Scan["ai_analysis"]>; lang: "mr" | "en" }) {
+  const L = (mr: string, en: string) => (lang === "mr" ? mr : en);
+  const confTone = ai.confidenceLevel === "high"
+    ? "bg-success/15 text-success-foreground border-success/40"
+    : ai.confidenceLevel === "medium"
+      ? "bg-warning/15 text-warning-foreground border-warning/40"
+      : "bg-destructive/15 text-destructive border-destructive/40";
+  const List = ({ items }: { items: string[] }) =>
+    items.length === 0 ? null : (
+      <ul className="mt-1 list-disc space-y-1 pl-5 text-sm">
+        {items.map((x, i) => <li key={i} className={lang === "mr" ? "deva" : ""}>{x}</li>)}
+      </ul>
+    );
+  return (
+    <div className="mt-4 rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-soft)]">
+      <div className="mb-2 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-primary">
+        <BadgeCheck className="h-4 w-4" /> {L("AI निदान", "AI Diagnosis")}
+      </div>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <div className="text-xs text-muted-foreground">{L("पीक", "Crop")}</div>
+          <div className={`text-lg font-semibold ${lang === "mr" ? "deva" : ""}`}>{ai.crop}</div>
+          <div className="mt-2 text-xs text-muted-foreground">{L("रोग", "Disease")}</div>
+          <div className={`text-base font-medium ${lang === "mr" ? "deva" : ""}`}>{ai.disease}</div>
+        </div>
+        <div className="flex flex-col items-end gap-1.5">
+          <span className={`chip ${confTone}`}>{L("विश्वास", "Confidence")}: {ai.confidenceLevel} · {ai.confidencePercent}%</span>
+          {ai.isHealthy && <span className="chip bg-success/15 text-success-foreground border-success/40">{L("निरोगी", "Healthy")}</span>}
+        </div>
+      </div>
+
+      {ai.symptoms.length > 0 && (
+        <div className="mt-4 rounded-2xl bg-muted/60 p-4">
+          <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{L("लक्षणे", "Symptoms")}</div>
+          <List items={ai.symptoms} />
+        </div>
+      )}
+      {ai.organicTreatment.length > 0 && (
+        <div className="mt-3 rounded-2xl bg-success/10 p-4">
+          <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{L("सेंद्रिय उपाय", "Organic Treatment")}</div>
+          <List items={ai.organicTreatment} />
+        </div>
+      )}
+      {ai.chemicalTreatment.length > 0 && (
+        <div className="mt-3 rounded-2xl bg-secondary p-4">
+          <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{L("रासायनिक उपाय", "Chemical Treatment")}</div>
+          <List items={ai.chemicalTreatment} />
+        </div>
+      )}
+      {ai.prevention.length > 0 && (
+        <div className="mt-3 rounded-2xl bg-accent/30 p-4">
+          <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{L("प्रतिबंध", "Prevention")}</div>
+          <List items={ai.prevention} />
+        </div>
+      )}
+      {(ai.needsExpert || ai.confidenceLevel === "low") && (
+        <div className="mt-3 rounded-2xl border border-warning/40 bg-warning/10 p-3 text-sm">
+          <AlertTriangle className="mr-1 inline h-4 w-4" />
+          {L("अचूक निदानासाठी जवळच्या कृषी अधिकाऱ्याचा सल्ला घ्या.", "Consult a local agriculture officer for accurate diagnosis.")}
+        </div>
+      )}
+      {ai.notes && (
+        <div className={`mt-3 text-xs text-muted-foreground ${lang === "mr" ? "deva" : ""}`}>{ai.notes}</div>
+      )}
+    </div>
+  );
+}
+
 function Section({ label, mr, en, accent, footer }: { label: string; mr: string; en: string; accent?: string; footer?: React.ReactNode }) {
   return (
     <div className={`mt-4 rounded-2xl p-4 ${accent ?? "bg-muted/60"}`}>
