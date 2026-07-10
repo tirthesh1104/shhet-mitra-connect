@@ -1,4 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { useRef, useState } from "react";
 import { Camera, Upload, Sparkles } from "lucide-react";
 import { toast } from "sonner";
@@ -7,6 +8,7 @@ import { AppShell } from "@/components/app-shell";
 import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/lib/auth-context";
 import { detectDisease } from "@/lib/disease-detector";
+import { analyzeCropImage } from "@/lib/disease-ai.functions";
 import { getForecast } from "@/lib/weather";
 
 export const Route = createFileRoute("/_authenticated/scan")({
