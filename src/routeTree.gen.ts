@@ -21,6 +21,7 @@ import { Route as AuthenticatedSchemesRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedScanRouteImport } from './routes/_authenticated/scan'
 import { Route as AuthenticatedPaaniRouteImport } from './routes/_authenticated/paani'
 import { Route as AuthenticatedMandiMitraRouteImport } from './routes/_authenticated/mandi-mitra'
+import { Route as AuthenticatedMandiBhavRouteImport } from './routes/_authenticated/mandi-bhav'
 import { Route as AuthenticatedLabourRouteImport } from './routes/_authenticated/labour'
 import { Route as AuthenticatedKrishikarzRouteImport } from './routes/_authenticated/krishikarz'
 import { Route as AuthenticatedKhetbazaarRouteImport } from './routes/_authenticated/khetbazaar'
@@ -95,6 +96,11 @@ const AuthenticatedPaaniRoute = AuthenticatedPaaniRouteImport.update({
 const AuthenticatedMandiMitraRoute = AuthenticatedMandiMitraRouteImport.update({
   id: '/mandi-mitra',
   path: '/mandi-mitra',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedMandiBhavRoute = AuthenticatedMandiBhavRouteImport.update({
+  id: '/mandi-bhav',
+  path: '/mandi-bhav',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedLabourRoute = AuthenticatedLabourRouteImport.update({
@@ -190,6 +196,7 @@ export interface FileRoutesByFullPath {
   '/khetbazaar': typeof AuthenticatedKhetbazaarRoute
   '/krishikarz': typeof AuthenticatedKrishikarzRoute
   '/labour': typeof AuthenticatedLabourRoute
+  '/mandi-bhav': typeof AuthenticatedMandiBhavRoute
   '/mandi-mitra': typeof AuthenticatedMandiMitraRoute
   '/paani': typeof AuthenticatedPaaniRoute
   '/scan': typeof AuthenticatedScanRouteWithChildren
@@ -218,6 +225,7 @@ export interface FileRoutesByTo {
   '/khetbazaar': typeof AuthenticatedKhetbazaarRoute
   '/krishikarz': typeof AuthenticatedKrishikarzRoute
   '/labour': typeof AuthenticatedLabourRoute
+  '/mandi-bhav': typeof AuthenticatedMandiBhavRoute
   '/mandi-mitra': typeof AuthenticatedMandiMitraRoute
   '/paani': typeof AuthenticatedPaaniRoute
   '/scan': typeof AuthenticatedScanRouteWithChildren
@@ -248,6 +256,7 @@ export interface FileRoutesById {
   '/_authenticated/khetbazaar': typeof AuthenticatedKhetbazaarRoute
   '/_authenticated/krishikarz': typeof AuthenticatedKrishikarzRoute
   '/_authenticated/labour': typeof AuthenticatedLabourRoute
+  '/_authenticated/mandi-bhav': typeof AuthenticatedMandiBhavRoute
   '/_authenticated/mandi-mitra': typeof AuthenticatedMandiMitraRoute
   '/_authenticated/paani': typeof AuthenticatedPaaniRoute
   '/_authenticated/scan': typeof AuthenticatedScanRouteWithChildren
@@ -278,6 +287,7 @@ export interface FileRouteTypes {
     | '/khetbazaar'
     | '/krishikarz'
     | '/labour'
+    | '/mandi-bhav'
     | '/mandi-mitra'
     | '/paani'
     | '/scan'
@@ -306,6 +316,7 @@ export interface FileRouteTypes {
     | '/khetbazaar'
     | '/krishikarz'
     | '/labour'
+    | '/mandi-bhav'
     | '/mandi-mitra'
     | '/paani'
     | '/scan'
@@ -335,6 +346,7 @@ export interface FileRouteTypes {
     | '/_authenticated/khetbazaar'
     | '/_authenticated/krishikarz'
     | '/_authenticated/labour'
+    | '/_authenticated/mandi-bhav'
     | '/_authenticated/mandi-mitra'
     | '/_authenticated/paani'
     | '/_authenticated/scan'
@@ -437,6 +449,13 @@ declare module '@tanstack/react-router' {
       path: '/mandi-mitra'
       fullPath: '/mandi-mitra'
       preLoaderRoute: typeof AuthenticatedMandiMitraRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/mandi-bhav': {
+      id: '/_authenticated/mandi-bhav'
+      path: '/mandi-bhav'
+      fullPath: '/mandi-bhav'
+      preLoaderRoute: typeof AuthenticatedMandiBhavRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/labour': {
@@ -573,6 +592,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedKhetbazaarRoute: typeof AuthenticatedKhetbazaarRoute
   AuthenticatedKrishikarzRoute: typeof AuthenticatedKrishikarzRoute
   AuthenticatedLabourRoute: typeof AuthenticatedLabourRoute
+  AuthenticatedMandiBhavRoute: typeof AuthenticatedMandiBhavRoute
   AuthenticatedMandiMitraRoute: typeof AuthenticatedMandiMitraRoute
   AuthenticatedPaaniRoute: typeof AuthenticatedPaaniRoute
   AuthenticatedScanRoute: typeof AuthenticatedScanRouteWithChildren
@@ -599,6 +619,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedKhetbazaarRoute: AuthenticatedKhetbazaarRoute,
   AuthenticatedKrishikarzRoute: AuthenticatedKrishikarzRoute,
   AuthenticatedLabourRoute: AuthenticatedLabourRoute,
+  AuthenticatedMandiBhavRoute: AuthenticatedMandiBhavRoute,
   AuthenticatedMandiMitraRoute: AuthenticatedMandiMitraRoute,
   AuthenticatedPaaniRoute: AuthenticatedPaaniRoute,
   AuthenticatedScanRoute: AuthenticatedScanRouteWithChildren,

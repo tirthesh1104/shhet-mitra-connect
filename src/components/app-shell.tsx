@@ -20,6 +20,7 @@ const MODULES: Array<{ to: string; key: Parameters<ReturnType<typeof useI18n>["t
   { to: "/krishikarz", key: "modKrishiKarz" },
   { to: "/beej", key: "modBeej" },
   { to: "/mandi-mitra", key: "modMandi" },
+  { to: "/mandi-bhav", key: "modMandiBhav" },
   { to: "/kharch", key: "modKharch" },
   { to: "/kendra", key: "modKendra" },
   { to: "/climate", key: "modClimate" },
