@@ -221,6 +221,39 @@ export type Database = {
           },
         ]
       }
+      krishi_kendras: {
+        Row: {
+          created_at: string
+          district: string
+          hours: string | null
+          id: string
+          name: string
+          phone: string | null
+          taluka: string
+          type: string
+        }
+        Insert: {
+          created_at?: string
+          district: string
+          hours?: string | null
+          id?: string
+          name: string
+          phone?: string | null
+          taluka: string
+          type: string
+        }
+        Update: {
+          created_at?: string
+          district?: string
+          hours?: string | null
+          id?: string
+          name?: string
+          phone?: string | null
+          taluka?: string
+          type?: string
+        }
+        Relationships: []
+      }
       labour_listings: {
         Row: {
           created_at: string
