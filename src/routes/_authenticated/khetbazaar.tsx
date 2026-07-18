@@ -1,14 +1,13 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
-import { TrendingUp, TrendingDown, Minus, Phone, Send } from "lucide-react";
+import { TrendingUp, TrendingDown, Minus, Phone, Send, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { ModulePage, Card, Chip } from "@/components/module-page";
 import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/lib/auth-context";
-import { MANDI_CROPS, priceSeries } from "@/data/content";
 
 export const Route = createFileRoute("/_authenticated/khetbazaar")({ component: Page });
 
@@ -31,40 +30,105 @@ function Page() {
   );
 }
 
+type PriceRow = { commodity: string; arrival_date: string; modal_price: number | null };
+
 function PricesTab() {
   const { lang } = useI18n();
+  const q = useQuery({
+    queryKey: ["mandi-prices-recent"],
+    queryFn: async () => {
+      const since = new Date(Date.now() - 30 * 24 * 3600 * 1000).toISOString().slice(0, 10);
+      const { data } = await supabase
+        .from("mandi_prices")
+        .select("commodity, arrival_date, modal_price")
+        .eq("state", "Maharashtra")
+        .gte("arrival_date", since)
+        .order("arrival_date", { ascending: true })
+        .limit(2000);
+      return (data ?? []) as PriceRow[];
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const grouped = useMemo(() => {
+    const map = new Map<string, { date: string; price: number }[]>();
+    for (const r of q.data ?? []) {
+      if (r.modal_price == null) continue;
+      const arr = map.get(r.commodity) ?? [];
+      arr.push({ date: r.arrival_date, price: Number(r.modal_price) });
+      map.set(r.commodity, arr);
+    }
+    // average per date to smooth across markets
+    const out: { commodity: string; series: { date: string; price: number }[] }[] = [];
+    for (const [commodity, rows] of map) {
+      const byDate = new Map<string, number[]>();
+      for (const r of rows) {
+        const a = byDate.get(r.date) ?? [];
+        a.push(r.price); byDate.set(r.date, a);
+      }
+      const series = [...byDate.entries()]
+        .sort(([a], [b]) => a.localeCompare(b))
+        .slice(-14)
+        .map(([date, arr]) => ({
+          date: date.slice(5),
+          price: Math.round(arr.reduce((s, x) => s + x, 0) / arr.length),
+        }));
+      if (series.length >= 2) out.push({ commodity, series });
+    }
+    return out.sort((a, b) => a.commodity.localeCompare(b.commodity));
+  }, [q.data]);
+
+  if (q.isLoading) {
+    return <Card><div className="text-center text-sm text-muted-foreground">{lang === "mr" ? "लोड होत आहे…" : "Loading…"}</div></Card>;
+  }
+
+  if (grouped.length === 0) {
+    return (
+      <Card>
+        <div className="text-sm text-muted-foreground">
+          {lang === "mr" ? "अद्याप लाइव्ह भाव उपलब्ध नाहीत." : "No live prices cached yet."}
+        </div>
+        <Link to="/mandi-bhav" className="chip mt-3 bg-primary text-primary-foreground">
+          <ExternalLink className="h-3.5 w-3.5" /> {lang === "mr" ? "थेट मंडी भाव पाहा" : "Open Mandi Bhav"}
+        </Link>
+      </Card>
+    );
+  }
+
   return (
     <div className="grid gap-3 sm:grid-cols-2">
-      {MANDI_CROPS.map((c, i) => {
-        const data = priceSeries(c.base, i + 1);
-        const today = data[data.length - 1].price;
-        const prices = data.map((d) => d.price);
+      {grouped.map(({ commodity, series }) => {
+        const first = series[0].price;
+        const today = series[series.length - 1].price;
+        const delta = today - first;
+        const trend = delta > first * 0.02 ? "up" : delta < -first * 0.02 ? "down" : "stable";
+        const T = trend === "up" ? TrendingUp : trend === "down" ? TrendingDown : Minus;
+        const tone = trend === "up" ? "success" : trend === "down" ? "danger" : "neutral";
+        const prices = series.map((d) => d.price);
         const hi = Math.max(...prices); const lo = Math.min(...prices);
-        const T = c.trend === "up" ? TrendingUp : c.trend === "down" ? TrendingDown : Minus;
-        const tone = c.trend === "up" ? "success" : c.trend === "down" ? "danger" : "neutral";
         return (
-          <Card key={c.key}>
+          <Card key={commodity}>
             <div className="flex items-start justify-between">
               <div>
-                <div className="font-medium">{lang === "mr" ? c.mr : c.en}</div>
-                <div className="text-xs text-muted-foreground">₹{today}/qtl · {lang === "mr" ? "आज" : "today"}</div>
+                <div className="font-medium">{commodity}</div>
+                <div className="text-xs text-muted-foreground">₹{today.toLocaleString("en-IN")}/qtl · {lang === "mr" ? "ताजा" : "latest"}</div>
               </div>
-              <Chip tone={tone}><T className="h-3 w-3" /> {c.trend}</Chip>
+              <Chip tone={tone}><T className="h-3 w-3" /> {trend}</Chip>
             </div>
             <div className="mt-2 h-24">
               <ResponsiveContainer>
-                <LineChart data={data}>
+                <LineChart data={series}>
                   <CartesianGrid strokeDasharray="2 4" opacity={0.3} />
                   <XAxis dataKey="date" fontSize={9} tickLine={false} axisLine={false} />
                   <YAxis hide domain={["dataMin - 50", "dataMax + 50"]} />
                   <Tooltip />
-                  <Line type="monotone" dataKey="price" stroke="oklch(0.55 0.12 130)" strokeWidth={2} dot={false} />
+                  <Line type="monotone" dataKey="price" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
             <div className="mt-1 flex justify-between text-[11px] text-muted-foreground">
-              <span>{lang === "mr" ? "उच्च" : "High"}: ₹{hi}</span>
-              <span>{lang === "mr" ? "कमी" : "Low"}: ₹{lo}</span>
+              <span>{lang === "mr" ? "उच्च" : "High"}: ₹{hi.toLocaleString("en-IN")}</span>
+              <span>{lang === "mr" ? "कमी" : "Low"}: ₹{lo.toLocaleString("en-IN")}</span>
             </div>
           </Card>
         );
