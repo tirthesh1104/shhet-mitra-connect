@@ -16,6 +16,7 @@ export const Route = createFileRoute("/_authenticated/scan/$id")({
 });
 
 type AiAnalysis = {
+  isValidCropImage?: boolean;
   crop: string; disease: string; isHealthy: boolean;
   confidenceLevel: "high" | "medium" | "low"; confidencePercent: number;
   symptoms: string[]; organicTreatment: string[]; chemicalTreatment: string[];
