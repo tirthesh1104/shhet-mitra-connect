@@ -33,12 +33,13 @@ function MandiBhavPage() {
     staleTime: 5 * 60 * 1000,
   });
 
+  const rows = q.data?.rows ?? [];
+
   useEffect(() => {
     if (!import.meta.env.DEV || q.isFetching || !district || !commodity || rows.length > 0 || !q.data?.debug) return;
     console.info("[FasalMitra Mandi Debug] zero records", q.data.debug);
   }, [commodity, district, q.data?.debug, q.isFetching, rows.length]);
 
-  const rows = q.data?.rows ?? [];
   const heading = lang === "mr" ? "मंडी भाव (महाराष्ट्र)" : "Mandi Prices (Maharashtra)";
   const sub = lang === "mr"
     ? "थेट Agmarknet — data.gov.in वरून"
