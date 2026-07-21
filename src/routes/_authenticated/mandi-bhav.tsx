@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RefreshCw, MapPin, Sprout } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
-import { fetchMandiPrices } from "@/lib/mandi.functions";
+import { fetchMandiPrices, MANDI_COMMODITIES } from "@/lib/mandi.functions";
 import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/_authenticated/mandi-bhav")({
@@ -20,13 +20,6 @@ const DISTRICTS = [
   "Thane", "Wardha", "Washim", "Yavatmal",
 ];
 
-const COMMODITIES = [
-  "Onion", "Tomato", "Potato", "Wheat", "Rice", "Soybean", "Cotton",
-  "Sugarcane", "Turmeric", "Chilli", "Cabbage", "Cauliflower", "Brinjal",
-  "Grapes", "Pomegranate", "Banana", "Mango", "Bajra", "Jowar", "Maize",
-  "Tur", "Gram", "Groundnut", "Sunflower",
-];
-
 function MandiBhavPage() {
   const { lang } = useI18n();
   const [district, setDistrict] = useState("");
@@ -39,6 +32,11 @@ function MandiBhavPage() {
     queryFn: () => call({ data: { district, commodity, forceRefresh: nonce > 0 } }),
     staleTime: 5 * 60 * 1000,
   });
+
+  useEffect(() => {
+    if (!import.meta.env.DEV || q.isFetching || !district || !commodity || rows.length > 0 || !q.data?.debug) return;
+    console.info("[FasalMitra Mandi Debug] zero records", q.data.debug);
+  }, [commodity, district, q.data?.debug, q.isFetching, rows.length]);
 
   const rows = q.data?.rows ?? [];
   const heading = lang === "mr" ? "मंडी भाव (महाराष्ट्र)" : "Mandi Prices (Maharashtra)";
@@ -88,7 +86,7 @@ function MandiBhavPage() {
             className="big-tap w-full rounded-2xl border border-border bg-background px-3 text-sm"
           >
             <option value="">{lang === "mr" ? "सर्व" : "All"}</option>
-            {COMMODITIES.map((c) => <option key={c} value={c}>{c}</option>)}
+            {MANDI_COMMODITIES.map((c) => <option key={c} value={c}>{c}</option>)}
           </select>
         </label>
       </div>
