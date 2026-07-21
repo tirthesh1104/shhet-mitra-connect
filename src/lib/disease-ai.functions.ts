@@ -98,6 +98,7 @@ ${data.cropHint ? `- The farmer says the crop is: ${data.cropHint}. Use this as 
       const cleaned = raw.replace(/^```json\s*/i, "").replace(/```$/, "").trim();
       const parsed = JSON.parse(cleaned) as Partial<CropDiagnosis>;
       const diagnosis: CropDiagnosis = {
+        isValidCropImage: parsed.isValidCropImage !== false,
         crop: String(parsed.crop ?? "Unknown"),
         disease: String(parsed.disease ?? "Uncertain"),
         isHealthy: Boolean(parsed.isHealthy),
