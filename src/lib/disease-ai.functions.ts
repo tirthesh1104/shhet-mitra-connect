@@ -47,8 +47,9 @@ export const analyzeCropImage = createServerFn({ method: "POST" })
       ? "All string values (crop, disease, symptoms, treatments, prevention, notes) MUST be written in Marathi (Devanagari script)."
       : "All string values MUST be written in English.";
 
-    const systemPrompt = `You are an expert Indian agricultural pathologist. Analyze the crop photo and return ONLY a valid JSON object (no markdown, no prose) with this exact shape:
+    const systemPrompt = `You are an expert Indian agricultural pathologist. First check whether the image actually shows a plant, leaf, crop, or agricultural produce. Then return ONLY a valid JSON object (no markdown, no prose) with this exact shape:
 {
+  "isValidCropImage": boolean (true ONLY if the image clearly shows a plant, leaf, crop, fruit, vegetable, or farm produce; false for people, animals, buildings, screenshots, random objects, or unrecognisable images),
   "crop": string,
   "disease": string,
   "isHealthy": boolean,
@@ -62,8 +63,9 @@ export const analyzeCropImage = createServerFn({ method: "POST" })
   "notes": string (one line — extra advice; if uncertain, tell farmer to consult a local Krishi officer)
 }
 Rules:
+- If isValidCropImage is false, set all other fields to safe defaults (empty strings/arrays, isHealthy=false, confidenceLevel="low", confidencePercent=0, needsExpert=true) and set notes to ask the farmer to upload a clear photo of the crop/leaf.
 - If the plant looks healthy, set isHealthy=true, disease="Healthy" (or "निरोगी"), and leave treatment arrays empty.
-- If the image is blurry, not a plant, or you cannot tell, set confidenceLevel="low" and needsExpert=true and say so in notes.
+- If the image is blurry or you cannot tell what plant it is, set confidenceLevel="low" and needsExpert=true and say so in notes.
 - Do NOT guess wildly. Prefer honest "low confidence" over a wrong diagnosis.
 - ${langNote}
 ${data.cropHint ? `- The farmer says the crop is: ${data.cropHint}. Use this as a hint, but correct it if the image clearly shows otherwise.` : ""}`;
