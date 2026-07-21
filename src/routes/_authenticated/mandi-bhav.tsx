@@ -108,8 +108,8 @@ function MandiBhavPage() {
         {!q.isLoading && rows.length === 0 && (
           <div className="rounded-2xl border border-border bg-card p-6 text-center text-sm text-muted-foreground">
             {lang === "mr"
-              ? "सध्या या पिकाचा भाव उपलब्ध नाही"
-              : "No prices available for this selection right now."}
+              ? "सध्या या गावासाठी भाव उपलब्ध नाही"
+              : "No prices available for this district/crop right now."}
           </div>
         )}
         {rows.map((r, i) => (

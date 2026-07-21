@@ -53,6 +53,16 @@ function ScanPage() {
       const village = profile.data?.village ?? "";
       const ai = aiResult?.diagnosis ?? null;
 
+      // Bug 3: reject non-crop images before saving/analysing.
+      if (ai && ai.isValidCropImage === false) {
+        toast.error(lang === "mr"
+          ? "कृपया पिकाचा/पानाचा स्पष्ट फोटो टाका"
+          : "Please upload a clear photo of a crop or leaf");
+        setBusy(false);
+        return;
+      }
+
+
       // Prefer AI values when available
       const confidence = ai
         ? ai.confidencePercent

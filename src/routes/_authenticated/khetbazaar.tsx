@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
-import { TrendingUp, TrendingDown, Minus, Phone, Send, ExternalLink } from "lucide-react";
+import { TrendingUp, TrendingDown, Minus, Phone, Send, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { ModulePage, Card, Chip } from "@/components/module-page";
@@ -89,7 +89,7 @@ function PricesTab() {
           {lang === "mr" ? "अद्याप लाइव्ह भाव उपलब्ध नाहीत." : "No live prices cached yet."}
         </div>
         <Link to="/mandi-bhav" className="chip mt-3 bg-primary text-primary-foreground">
-          <ExternalLink className="h-3.5 w-3.5" /> {lang === "mr" ? "थेट मंडी भाव पाहा" : "Open Mandi Bhav"}
+          <ArrowRight className="h-3.5 w-3.5" /> {lang === "mr" ? "थेट मंडी भाव पाहा" : "Open Mandi Bhav"}
         </Link>
       </Card>
     );
