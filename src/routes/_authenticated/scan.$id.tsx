@@ -127,12 +127,15 @@ function ReportActions({ scan }: { scan: Scan }) {
         costEstimate: scan.cost_estimate, lang: pdfLang,
       });
       return blob;
+    } catch (err) {
+      toast.error((lang === "mr" ? "PDF तयार करता आले नाही: " : "Could not create PDF: ") + (err as Error).message);
+      throw err;
     } finally { setBusy(null); }
   }
   return (
     <div className="mt-4 flex flex-wrap gap-2">
-      <button disabled={!!busy} onClick={async () => { await build("mr"); toast.success(t("downloadPdf")); }} className="chip"><FileDown className="h-3.5 w-3.5" /> {busy === "mr" ? "..." : "मराठी PDF"}</button>
-      <button disabled={!!busy} onClick={async () => { await build("en"); toast.success(t("downloadPdf")); }} className="chip"><FileDown className="h-3.5 w-3.5" /> English PDF</button>
+      <button disabled={!!busy} onClick={async () => { try { await build("mr"); toast.success(t("downloadPdf")); } catch { /* handled */ } }} className="chip"><FileDown className="h-3.5 w-3.5" /> {busy === "mr" ? "..." : "मराठी PDF"}</button>
+      <button disabled={!!busy} onClick={async () => { try { await build("en"); toast.success(t("downloadPdf")); } catch { /* handled */ } }} className="chip"><FileDown className="h-3.5 w-3.5" /> English PDF</button>
       <button
         disabled={!!busy}
         onClick={async () => {
@@ -144,7 +147,7 @@ function ReportActions({ scan }: { scan: Scan }) {
               cropName: scan.crop_name, diseaseKey: scan.disease_key, confidence: scan.confidence, severity: scan.severity, lang,
             }, blob);
             if (r === "copied") toast.success(lang === "mr" ? "सारांश कॉपी झाला" : "Summary copied");
-          } finally { setBusy(null); }
+          } catch { /* handled */ } finally { setBusy(null); }
         }}
         className="chip"
       ><Share2 className="h-3.5 w-3.5" /> {t("share")}</button>
