@@ -89,7 +89,7 @@ function PricesTab() {
           {lang === "mr" ? "अद्याप लाइव्ह भाव उपलब्ध नाहीत." : "No live prices cached yet."}
         </div>
         <Link to="/mandi-bhav" className="chip mt-3 bg-primary text-primary-foreground">
-          <ExternalLink className="h-3.5 w-3.5" /> {lang === "mr" ? "थेट मंडी भाव पाहा" : "Open Mandi Bhav"}
+          <ArrowRight className="h-3.5 w-3.5" /> {lang === "mr" ? "थेट मंडी भाव पाहा" : "Open Mandi Bhav"}
         </Link>
       </Card>
     );
