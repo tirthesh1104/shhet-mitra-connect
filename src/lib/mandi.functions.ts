@@ -44,7 +44,7 @@ export const fetchMandiPrices = createServerFn({ method: "POST" })
     }
 
     // Live fetch
-    const apiKey = process.env.AGMARKNET_API_KEY;
+    const apiKey = process.env.DATA_GOV_API_KEY || process.env.AGMARKNET_API_KEY;
     if (!apiKey) {
       return { rows: [] as MandiRow[], source: "none" as const, error: "API key missing" };
     }
