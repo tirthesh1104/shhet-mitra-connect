@@ -8,6 +8,7 @@ const InputSchema = z.object({
 });
 
 export type CropDiagnosis = {
+  isValidCropImage: boolean;
   crop: string;
   disease: string;
   isHealthy: boolean;
@@ -22,6 +23,7 @@ export type CropDiagnosis = {
 };
 
 const FALLBACK: CropDiagnosis = {
+  isValidCropImage: true,
   crop: "Unknown",
   disease: "Uncertain",
   isHealthy: false,
