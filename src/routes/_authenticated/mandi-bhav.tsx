@@ -75,7 +75,10 @@ function MandiBhavPage() {
     staleTime: 5 * 60 * 1000,
   });
 
-  const rows = q.data?.rows ?? [];
+  const liveRows = q.data?.rows ?? [];
+  const usingDemo = !q.isLoading && liveRows.length === 0;
+  const rows = usingDemo ? demoRows(district, commodity) : liveRows;
+
 
   useEffect(() => {
     if (!import.meta.env.DEV || q.isFetching || !district || !commodity || rows.length > 0 || !q.data?.debug) return;
