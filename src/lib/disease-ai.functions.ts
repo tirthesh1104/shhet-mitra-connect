@@ -19,6 +19,7 @@ export type CropDiagnosis = {
   chemicalTreatment: string[];
   prevention: string[];
   needsExpert: boolean;
+  possibleAlternatives: string[];
   notes: string;
 };
 
@@ -34,6 +35,7 @@ const FALLBACK: CropDiagnosis = {
   chemicalTreatment: [],
   prevention: [],
   needsExpert: true,
+  possibleAlternatives: [],
   notes: "अचूक निदानासाठी जवळच्या कृषी अधिकाऱ्याचा सल्ला घ्या. / Consult a local agriculture officer for accurate diagnosis.",
 };
 
@@ -59,6 +61,7 @@ export const analyzeCropImage = createServerFn({ method: "POST" })
   "organicTreatment": string[] (2-4 practical steps with local ingredients),
   "chemicalTreatment": string[] (2-4 steps with generic actives + Indian brand names),
   "prevention": string[] (2-4 preventive measures for next season),
+  "possible_alternative_diagnoses": string[] (1-2 other plausible causes when the image is ambiguous; empty array if you are sure),
   "needsExpert": boolean (true if confidenceLevel is low or image quality is poor),
   "notes": string (one line — extra advice; if uncertain, tell farmer to consult a local Krishi officer)
 }
@@ -66,6 +69,8 @@ Rules:
 - If isValidCropImage is false, set all other fields to safe defaults (empty strings/arrays, isHealthy=false, confidenceLevel="low", confidencePercent=0, needsExpert=true) and set notes to ask the farmer to upload a clear photo of the crop/leaf.
 - If the plant looks healthy, set isHealthy=true, disease="Healthy" (or "निरोगी"), and leave treatment arrays empty.
 - If the image is blurry or you cannot tell what plant it is, set confidenceLevel="low" and needsExpert=true and say so in notes.
+- If you are not confident about the exact disease, say so honestly in the confidence score rather than guessing a specific disease name — a lower confidence score with an honest "possible causes" list is more useful to a farmer than a falsely confident wrong diagnosis.
+- The confidence score must genuinely reflect image clarity: a blurry, dark, or partial photo must score lower than a clear, well-lit close-up.
 - Do NOT guess wildly. Prefer honest "low confidence" over a wrong diagnosis.
 - ${langNote}
 ${data.cropHint ? `- The farmer says the crop is: ${data.cropHint}. Use this as a hint, but correct it if the image clearly shows otherwise.` : ""}`;
@@ -89,6 +94,7 @@ ${data.cropHint ? `- The farmer says the crop is: ${data.cropHint}. Use this as 
               ],
             },
           ],
+          temperature: 0.15,
           response_format: { type: "json_object" },
         }),
       });
@@ -109,6 +115,9 @@ ${data.cropHint ? `- The farmer says the crop is: ${data.cropHint}. Use this as 
         chemicalTreatment: arr(parsed.chemicalTreatment),
         prevention: arr(parsed.prevention),
         needsExpert: Boolean(parsed.needsExpert),
+        possibleAlternatives: arr(
+          (parsed as Record<string, unknown>).possible_alternative_diagnoses ?? parsed.possibleAlternatives,
+        ),
         notes: String(parsed.notes ?? ""),
       };
       return { diagnosis, source: "ai" as const };
