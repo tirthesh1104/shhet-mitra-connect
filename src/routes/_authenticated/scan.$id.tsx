@@ -20,7 +20,7 @@ type AiAnalysis = {
   crop: string; disease: string; isHealthy: boolean;
   confidenceLevel: "high" | "medium" | "low"; confidencePercent: number;
   symptoms: string[]; organicTreatment: string[]; chemicalTreatment: string[];
-  prevention: string[]; needsExpert: boolean; notes: string;
+  prevention: string[]; needsExpert: boolean; possibleAlternatives?: string[]; notes: string;
 } | null;
 
 type Scan = {
@@ -124,7 +124,7 @@ function ReportActions({ scan }: { scan: Scan }) {
         date: new Date(scan.created_at).toLocaleDateString(),
         cropName: scan.crop_name, imageDataUrl: scan.image_url,
         diseaseKey: scan.disease_key, confidence: scan.confidence, severity: scan.severity,
-        costEstimate: scan.cost_estimate, lang: pdfLang,
+        costEstimate: scan.cost_estimate, lang: pdfLang, ai: scan.ai_analysis,
       });
       return blob;
     } catch (err) {
@@ -208,6 +208,12 @@ function AiDiagnosisCard({ ai, lang }: { ai: NonNullable<Scan["ai_analysis"]>; l
         <div className="mt-3 rounded-2xl bg-accent/30 p-4">
           <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{L("प्रतिबंध", "Prevention")}</div>
           <List items={ai.prevention} />
+        </div>
+      )}
+      {(ai.possibleAlternatives?.length ?? 0) > 0 && (
+        <div className="mt-3 rounded-2xl bg-muted/60 p-4">
+          <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{L("इतर शक्यता", "Possible alternatives")}</div>
+          <List items={ai.possibleAlternatives!} />
         </div>
       )}
       {(ai.needsExpert || ai.confidenceLevel === "low") && (
