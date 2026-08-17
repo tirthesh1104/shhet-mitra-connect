@@ -35,7 +35,7 @@ function AuthPage() {
           email, password,
           options: {
             data: { full_name: name },
-            emailRedirectTo: window.location.origin + "/app",
+            emailRedirectTo: window.location.origin + "/",
           },
         });
         if (error) throw error;
@@ -53,7 +53,10 @@ function AuthPage() {
 
   async function handleGoogle() {
     setBusy(true);
-    const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/app" });
+    // Redirect back to the site root (a public route) so the OAuth callback never
+    // lands on a protected path — that is what caused 404s on deployed builds.
+    const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/" });
+
     if (result.error) { toast.error(result.error.message); setBusy(false); }
   }
 

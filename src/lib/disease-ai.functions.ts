@@ -120,7 +120,21 @@ ${data.cropHint ? `- The farmer says the crop is: ${data.cropHint}. Use this as 
         ),
         notes: String(parsed.notes ?? ""),
       };
+
+      // Validation gate: never present a low-confidence guess as a fact.
+      const CONFIDENCE_FLOOR = 55;
+      if (!diagnosis.isHealthy && diagnosis.confidencePercent < CONFIDENCE_FLOOR) {
+        const guess = diagnosis.disease;
+        if (guess && !diagnosis.possibleAlternatives.includes(guess)) {
+          diagnosis.possibleAlternatives = [guess, ...diagnosis.possibleAlternatives].slice(0, 6);
+        }
+        diagnosis.disease = data.lang === "mr" ? "निदान निश्चित नाही" : "Not confidently identified";
+        diagnosis.confidenceLevel = "low";
+        diagnosis.needsExpert = true;
+        diagnosis.notes = diagnosis.notes || FALLBACK.notes;
+      }
       return { diagnosis, source: "ai" as const };
+
     } catch {
       return { diagnosis: FALLBACK, source: "fallback" as const };
     }

@@ -1,10 +1,10 @@
 {
   "name": "shhet-mitra-connect",
-  "main": ".output/server/index.mjs",
+  "main": "dist/server/index.mjs",
   "compatibility_date": "2025-01-01",
   "compatibility_flags": ["nodejs_compat"],
   "assets": {
-    "directory": ".output/public"
+    "directory": "dist/client"
   },
   "observability": {
     "enabled": true
