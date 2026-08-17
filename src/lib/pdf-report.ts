@@ -28,7 +28,7 @@ export type ReportInput = {
 /** Generate and download a PDF report built directly from data. */
 export async function downloadReportPdf(r: ReportInput): Promise<Blob> {
   const d = DISEASES.find((x) => x.key === r.diseaseKey) ?? DISEASES[0];
-  const ai = r.ai ?? null;
+  const ai = (r.ai ?? null) as (ReportInput["ai"] & Record<string, unknown>) | null;
 
   return generateScanReportPDF({
     imageUrl: r.imageDataUrl ?? null,
@@ -36,26 +36,30 @@ export async function downloadReportPdf(r: ReportInput): Promise<Blob> {
     diseaseName: ai?.disease || d.name.en,
     diseaseNameMarathi: d.name.mr,
     confidence: Math.round(r.confidence ?? 0),
+    confidenceLevel: (ai?.["confidenceLevel"] as string) ?? undefined,
     severity: r.severity,
+    isHealthy: Boolean(ai?.["isHealthy"]),
+    needsExpert: Boolean(ai?.["needsExpert"]),
     symptoms: ai?.symptoms?.length ? ai.symptoms : [d.cause.en],
-    organicTreatment: ai?.organicTreatment?.length ? ai.organicTreatment.join(" • ") : d.organic.en,
-    chemicalTreatment: [
-      ai?.chemicalTreatment?.length ? ai.chemicalTreatment.join(" • ") : d.chemical.en,
-      d.brands.length ? `Brands: ${d.brands.join(", ")}` : "",
-    ].filter(Boolean).join("\n"),
+    organicTreatment: ai?.organicTreatment?.length ? ai.organicTreatment : [d.organic.en],
+    chemicalTreatment: ai?.chemicalTreatment?.length ? ai.chemicalTreatment : [d.chemical.en],
+    prevention: ai?.prevention?.length ? ai.prevention : [],
+    possibleAlternatives: (ai?.["possibleAlternatives"] as string[]) ?? [],
+    brands: d.brands,
     fertilizerRecommendation: r.costEstimate
       ? `Balanced NPK as per soil card. Estimated input cost: Rs ${r.costEstimate}/acre.`
       : "Apply balanced NPK as per your soil health card.",
-    preventionTips: [
-      ai?.prevention?.length ? ai.prevention.join(" • ") : "",
-      ai?.notes || "",
-      "Re-check the crop after 3-5 days. Contact your local Krishi officer if it worsens.",
-    ].filter(Boolean).join("\n"),
+    preventionTips: "Re-check the crop after 3-5 days. Contact your local Krishi officer if it worsens.",
+    notes: ai?.notes || "",
+    costEstimate: r.costEstimate ?? null,
+    costRange: d.costRange as [number, number],
     scanDate: r.date,
     farmerName: r.farmerName,
     village: r.village,
+    rawModelOutput: ai ?? undefined,
   });
 }
+
 
 /** Web Share API with graceful fallback: shares the PDF blob if supported, else copies a summary. */
 export async function shareReport(r: ReportInput, blob: Blob) {
