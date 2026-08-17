@@ -1,7 +1,9 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { Sprout, Leaf, CloudRain, Mic, IndianRupee, Languages } from "lucide-react";
 import seedling from "@/assets/seedling-hero.png";
 import { useI18n } from "@/lib/i18n";
+import { useAuth } from "@/lib/auth-context";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -17,6 +19,15 @@ export const Route = createFileRoute("/")({
 
 function Landing() {
   const { t, setLang, lang } = useI18n();
+  const { session, loading } = useAuth();
+  const navigate = useNavigate();
+
+  // OAuth callbacks land on "/" (a public route). Once the session hydrates,
+  // continue into the app.
+  useEffect(() => {
+    if (!loading && session) navigate({ to: "/app", replace: true });
+  }, [session, loading, navigate]);
+
 
   const features = [
     { icon: Leaf, mr: "रोग ओळख", en: "Disease scan" },
