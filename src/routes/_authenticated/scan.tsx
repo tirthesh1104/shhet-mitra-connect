@@ -45,11 +45,12 @@ function ScanPage() {
     setBusy(true);
     try {
       const dataUrl = await downscaleToDataUrl(f);
-      const [detection, weather, profile, aiResult] = await Promise.all([
+      const [detection, weather, profile, aiResult, location] = await Promise.all([
         detectDisease(f),
         getForecast(),
         supabase.from("profiles").select("village").eq("id", user!.id).maybeSingle(),
         analyze({ data: { imageDataUrl: dataUrl, cropHint: cropName.trim(), lang } }).catch(() => null),
+        captureLocation(5000).catch(() => EMPTY_LOCATION),
       ]);
       const village = profile.data?.village ?? "";
       const ai = aiResult?.diagnosis ?? null;
