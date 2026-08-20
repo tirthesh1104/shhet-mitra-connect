@@ -22,6 +22,7 @@ export interface ScanReportData {
   costEstimate?: number | null;
   costRange?: [number, number] | null;
   scanDate: string;
+  location?: string;
   farmerName?: string;
   village?: string;
   rawModelOutput?: unknown;
