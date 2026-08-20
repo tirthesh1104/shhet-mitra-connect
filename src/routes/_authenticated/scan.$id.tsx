@@ -133,6 +133,7 @@ function ReportActions({ scan }: { scan: Scan }) {
         cropName: scan.crop_name, imageDataUrl: scan.image_url,
         diseaseKey: scan.disease_key, confidence: scan.confidence, severity: scan.severity,
         costEstimate: scan.cost_estimate, lang: pdfLang, ai: scan.ai_analysis,
+        location: formatLocation(scan, pdfLang),
       });
       return blob;
     } catch (err) {
