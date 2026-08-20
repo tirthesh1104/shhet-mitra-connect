@@ -55,6 +55,7 @@ export async function downloadReportPdf(r: ReportInput): Promise<Blob> {
     costEstimate: r.costEstimate ?? null,
     costRange: d.costRange as [number, number],
     scanDate: r.date,
+    location: r.location,
     farmerName: r.farmerName,
     village: r.village,
     rawModelOutput: ai ?? undefined,
