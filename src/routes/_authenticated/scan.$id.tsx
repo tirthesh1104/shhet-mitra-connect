@@ -10,6 +10,7 @@ import { speak, stopSpeaking } from "@/lib/voice-mode";
 import { DISEASES } from "@/data/diseases";
 import { useAuth } from "@/lib/auth-context";
 import { downloadReportPdf, shareReport } from "@/lib/pdf-report";
+import { formatLocation } from "@/lib/geolocation";
 
 export const Route = createFileRoute("/_authenticated/scan/$id")({
   component: ScanResult,
