@@ -10,6 +10,7 @@ import { useAuth } from "@/lib/auth-context";
 import { detectDisease } from "@/lib/disease-detector";
 import { analyzeCropImage } from "@/lib/disease-ai.functions";
 import { getForecast } from "@/lib/weather";
+import { captureLocation, EMPTY_LOCATION } from "@/lib/geolocation";
 
 export const Route = createFileRoute("/_authenticated/scan")({
   component: ScanPage,
