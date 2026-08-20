@@ -91,6 +91,10 @@ function ScanPage() {
         weather_snapshot: { rainExpected: weather.rainExpected, days: weather.days, source: weather.source },
         village,
         cost_estimate: cost,
+        latitude: location.latitude,
+        longitude: location.longitude,
+        district: location.district,
+        taluka: location.taluka,
         ai_analysis: ai as unknown as never,
       }).select("id").single();
       if (error) throw error;
