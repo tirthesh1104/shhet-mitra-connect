@@ -162,6 +162,7 @@ export async function generateScanReportPDF(data: ScanReportData): Promise<Blob>
   heading("Report details");
   kv([
     ["Scan date", v(data.scanDate)],
+    ["Scan location", v(data.location) === "-" ? "Location not available" : v(data.location)],
     ["Farmer", v(data.farmerName)],
     ["Village", v(data.village)],
     ["Crop", v(data.cropType)],
