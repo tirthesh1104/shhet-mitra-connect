@@ -469,10 +469,14 @@ export type Database = {
           created_at: string
           crop_name: string
           disease_key: string
+          district: string | null
           id: string
           image_url: string | null
+          latitude: number | null
+          longitude: number | null
           sent_to_expert: boolean
           severity: string
+          taluka: string | null
           user_id: string
           village: string | null
           weather_snapshot: Json | null
@@ -484,10 +488,14 @@ export type Database = {
           created_at?: string
           crop_name: string
           disease_key: string
+          district?: string | null
           id?: string
           image_url?: string | null
+          latitude?: number | null
+          longitude?: number | null
           sent_to_expert?: boolean
           severity: string
+          taluka?: string | null
           user_id: string
           village?: string | null
           weather_snapshot?: Json | null
@@ -499,10 +507,14 @@ export type Database = {
           created_at?: string
           crop_name?: string
           disease_key?: string
+          district?: string | null
           id?: string
           image_url?: string | null
+          latitude?: number | null
+          longitude?: number | null
           sent_to_expert?: boolean
           severity?: string
+          taluka?: string | null
           user_id?: string
           village?: string | null
           weather_snapshot?: Json | null
