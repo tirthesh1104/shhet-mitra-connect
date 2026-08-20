@@ -14,6 +14,7 @@ export type ReportInput = {
   confidence: number;
   severity: string;
   costEstimate?: number | null;
+  location?: string;
   lang: Lang;
   ai?: {
     disease?: string;
@@ -54,6 +55,7 @@ export async function downloadReportPdf(r: ReportInput): Promise<Blob> {
     costEstimate: r.costEstimate ?? null,
     costRange: d.costRange as [number, number],
     scanDate: r.date,
+    location: r.location,
     farmerName: r.farmerName,
     village: r.village,
     rawModelOutput: ai ?? undefined,

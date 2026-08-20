@@ -72,6 +72,9 @@ Rules:
 - If you are not confident about the exact disease, say so honestly in the confidence score rather than guessing a specific disease name — a lower confidence score with an honest "possible causes" list is more useful to a farmer than a falsely confident wrong diagnosis.
 - The confidence score must genuinely reflect image clarity: a blurry, dark, or partial photo must score lower than a clear, well-lit close-up.
 - Do NOT guess wildly. Prefer honest "low confidence" over a wrong diagnosis.
+- Always include at least one chemical option (unless the plant is healthy), using actives commonly sold in Indian agri-input shops: Mancozeb, Copper oxychloride, Imidacloprid, Carbendazim, Neem oil 3%, etc., with dosage per litre and spray interval.
+- Organic steps must state the remedy, application method, and frequency.
+- Never invent a disease when the plant looks healthy.
 - ${langNote}
 ${data.cropHint ? `- The farmer says the crop is: ${data.cropHint}. Use this as a hint, but correct it if the image clearly shows otherwise.` : ""}`;
 

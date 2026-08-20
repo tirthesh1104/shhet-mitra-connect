@@ -10,6 +10,7 @@ import { speak, stopSpeaking } from "@/lib/voice-mode";
 import { DISEASES } from "@/data/diseases";
 import { useAuth } from "@/lib/auth-context";
 import { downloadReportPdf, shareReport } from "@/lib/pdf-report";
+import { formatLocation } from "@/lib/geolocation";
 
 export const Route = createFileRoute("/_authenticated/scan/$id")({
   component: ScanResult,
@@ -28,6 +29,10 @@ type Scan = {
   disease_key: string; confidence: number; severity: string;
   cost_estimate: number | null; sent_to_expert: boolean;
   created_at: string;
+  latitude?: number | null;
+  longitude?: number | null;
+  district?: string | null;
+  taluka?: string | null;
   ai_analysis: AiAnalysis;
 };
 
@@ -61,6 +66,9 @@ function ScanResult() {
     <AppShell>
       <h1 className="font-display text-2xl font-semibold">{t("result")}</h1>
       <p className="mt-0.5 text-xs text-muted-foreground">{new Date(s.created_at).toLocaleString()} · {s.crop_name}</p>
+      <p className={`mt-0.5 text-xs text-muted-foreground ${lang === "mr" ? "deva" : ""}`}>
+        📍 {formatLocation(s, lang)}
+      </p>
 
       {s.image_url && <HeatmapImage src={s.image_url} severity={s.severity as "low" | "medium" | "high"} />}
 
@@ -125,6 +133,7 @@ function ReportActions({ scan }: { scan: Scan }) {
         cropName: scan.crop_name, imageDataUrl: scan.image_url,
         diseaseKey: scan.disease_key, confidence: scan.confidence, severity: scan.severity,
         costEstimate: scan.cost_estimate, lang: pdfLang, ai: scan.ai_analysis,
+        location: formatLocation(scan, pdfLang),
       });
       return blob;
     } catch (err) {

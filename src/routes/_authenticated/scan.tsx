@@ -10,6 +10,7 @@ import { useAuth } from "@/lib/auth-context";
 import { detectDisease } from "@/lib/disease-detector";
 import { analyzeCropImage } from "@/lib/disease-ai.functions";
 import { getForecast } from "@/lib/weather";
+import { captureLocation, EMPTY_LOCATION } from "@/lib/geolocation";
 
 export const Route = createFileRoute("/_authenticated/scan")({
   component: ScanPage,
@@ -44,11 +45,12 @@ function ScanPage() {
     setBusy(true);
     try {
       const dataUrl = await downscaleToDataUrl(f);
-      const [detection, weather, profile, aiResult] = await Promise.all([
+      const [detection, weather, profile, aiResult, location] = await Promise.all([
         detectDisease(f),
         getForecast(),
         supabase.from("profiles").select("village").eq("id", user!.id).maybeSingle(),
         analyze({ data: { imageDataUrl: dataUrl, cropHint: cropName.trim(), lang } }).catch(() => null),
+        captureLocation(5000).catch(() => EMPTY_LOCATION),
       ]);
       const village = profile.data?.village ?? "";
       const ai = aiResult?.diagnosis ?? null;
@@ -62,6 +64,11 @@ function ScanPage() {
         return;
       }
 
+      if (!ai || aiResult?.source === "fallback") {
+        toast.warning(lang === "mr"
+          ? "AI निदान मिळाले नाही — पुन्हा प्रयत्न करा"
+          : "AI diagnosis unavailable — please try again");
+      }
 
       // Prefer AI values when available
       const confidence = ai
@@ -84,6 +91,10 @@ function ScanPage() {
         weather_snapshot: { rainExpected: weather.rainExpected, days: weather.days, source: weather.source },
         village,
         cost_estimate: cost,
+        latitude: location.latitude,
+        longitude: location.longitude,
+        district: location.district,
+        taluka: location.taluka,
         ai_analysis: ai as unknown as never,
       }).select("id").single();
       if (error) throw error;
