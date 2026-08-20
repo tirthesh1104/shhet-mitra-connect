@@ -66,6 +66,9 @@ function ScanResult() {
     <AppShell>
       <h1 className="font-display text-2xl font-semibold">{t("result")}</h1>
       <p className="mt-0.5 text-xs text-muted-foreground">{new Date(s.created_at).toLocaleString()} · {s.crop_name}</p>
+      <p className={`mt-0.5 text-xs text-muted-foreground ${lang === "mr" ? "deva" : ""}`}>
+        📍 {formatLocation(s, lang)}
+      </p>
 
       {s.image_url && <HeatmapImage src={s.image_url} severity={s.severity as "low" | "medium" | "high"} />}
 
