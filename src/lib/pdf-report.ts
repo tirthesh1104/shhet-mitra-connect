@@ -14,6 +14,7 @@ export type ReportInput = {
   confidence: number;
   severity: string;
   costEstimate?: number | null;
+  location?: string;
   lang: Lang;
   ai?: {
     disease?: string;
