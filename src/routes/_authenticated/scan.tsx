@@ -64,6 +64,11 @@ function ScanPage() {
         return;
       }
 
+      if (!ai || aiResult?.source === "fallback") {
+        toast.warning(lang === "mr"
+          ? "AI निदान मिळाले नाही — पुन्हा प्रयत्न करा"
+          : "AI diagnosis unavailable — please try again");
+      }
 
       // Prefer AI values when available
       const confidence = ai
