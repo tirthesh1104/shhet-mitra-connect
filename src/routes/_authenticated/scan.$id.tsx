@@ -28,6 +28,10 @@ type Scan = {
   disease_key: string; confidence: number; severity: string;
   cost_estimate: number | null; sent_to_expert: boolean;
   created_at: string;
+  latitude?: number | null;
+  longitude?: number | null;
+  district?: string | null;
+  taluka?: string | null;
   ai_analysis: AiAnalysis;
 };
 
