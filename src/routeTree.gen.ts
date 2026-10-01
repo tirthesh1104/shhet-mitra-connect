@@ -9,52 +9,157 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthenticatedYieldRouteImport } from './routes/_authenticated/yield'
-import { Route as AuthenticatedWeatherHistoryRouteImport } from './routes/_authenticated/weather-history'
-import { Route as AuthenticatedSoilRouteImport } from './routes/_authenticated/soil'
-import { Route as AuthenticatedSideIncomeRouteImport } from './routes/_authenticated/side-income'
-import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
-import { Route as AuthenticatedSchemesRouteImport } from './routes/_authenticated/schemes'
-import { Route as AuthenticatedScanRouteImport } from './routes/_authenticated/scan'
-import { Route as AuthenticatedPaaniRouteImport } from './routes/_authenticated/paani'
-import { Route as AuthenticatedMandiMitraRouteImport } from './routes/_authenticated/mandi-mitra'
-import { Route as AuthenticatedMandiBhavRouteImport } from './routes/_authenticated/mandi-bhav'
-import { Route as AuthenticatedLabourRouteImport } from './routes/_authenticated/labour'
-import { Route as AuthenticatedKrishikarzRouteImport } from './routes/_authenticated/krishikarz'
-import { Route as AuthenticatedKhetbazaarRouteImport } from './routes/_authenticated/khetbazaar'
-import { Route as AuthenticatedKharchRouteImport } from './routes/_authenticated/kharch'
-import { Route as AuthenticatedKendraRouteImport } from './routes/_authenticated/kendra'
-import { Route as AuthenticatedJournalRouteImport } from './routes/_authenticated/journal'
-import { Route as AuthenticatedForumRouteImport } from './routes/_authenticated/forum'
-import { Route as AuthenticatedDebtFreeRouteImport } from './routes/_authenticated/debt-free'
-import { Route as AuthenticatedCommunityRouteImport } from './routes/_authenticated/community'
-import { Route as AuthenticatedClimateRouteImport } from './routes/_authenticated/climate'
-import { Route as AuthenticatedCarbonRouteImport } from './routes/_authenticated/carbon'
-import { Route as AuthenticatedCalendarRouteImport } from './routes/_authenticated/calendar'
-import { Route as AuthenticatedBeejRouteImport } from './routes/_authenticated/beej'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
+import { Route as AuthenticatedBeejRouteImport } from './routes/_authenticated/beej'
+import { Route as AuthenticatedCalendarRouteImport } from './routes/_authenticated/calendar'
+import { Route as AuthenticatedCarbonRouteImport } from './routes/_authenticated/carbon'
+import { Route as AuthenticatedClimateRouteImport } from './routes/_authenticated/climate'
+import { Route as AuthenticatedCommunityRouteImport } from './routes/_authenticated/community'
+import { Route as AuthenticatedDebtFreeRouteImport } from './routes/_authenticated/debt-free'
+import { Route as AuthenticatedForumRouteImport } from './routes/_authenticated/forum'
+import { Route as AuthenticatedJournalRouteImport } from './routes/_authenticated/journal'
+import { Route as AuthenticatedKendraRouteImport } from './routes/_authenticated/kendra'
+import { Route as AuthenticatedKharchRouteImport } from './routes/_authenticated/kharch'
+import { Route as AuthenticatedKhetbazaarRouteImport } from './routes/_authenticated/khetbazaar'
+import { Route as AuthenticatedKrishikarzRouteImport } from './routes/_authenticated/krishikarz'
+import { Route as AuthenticatedLabourRouteImport } from './routes/_authenticated/labour'
+import { Route as AuthenticatedMandiBhavRouteImport } from './routes/_authenticated/mandi-bhav'
+import { Route as AuthenticatedMandiMitraRouteImport } from './routes/_authenticated/mandi-mitra'
+import { Route as AuthenticatedPaaniRouteImport } from './routes/_authenticated/paani'
+import { Route as AuthenticatedScanRouteImport } from './routes/_authenticated/scan'
+import { Route as AuthenticatedSchemesRouteImport } from './routes/_authenticated/schemes'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
+import { Route as AuthenticatedSideIncomeRouteImport } from './routes/_authenticated/side-income'
+import { Route as AuthenticatedSoilRouteImport } from './routes/_authenticated/soil'
+import { Route as AuthenticatedWeatherHistoryRouteImport } from './routes/_authenticated/weather-history'
+import { Route as AuthenticatedYieldRouteImport } from './routes/_authenticated/yield'
 import { Route as AuthenticatedScanIdRouteImport } from './routes/_authenticated/scan.$id'
 
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedYieldRoute = AuthenticatedYieldRouteImport.update({
-  id: '/yield',
-  path: '/yield',
+const AuthenticatedAppRoute = AuthenticatedAppRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedBeejRoute = AuthenticatedBeejRouteImport.update({
+  id: '/beej',
+  path: '/beej',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedCalendarRoute = AuthenticatedCalendarRouteImport.update({
+  id: '/calendar',
+  path: '/calendar',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedCarbonRoute = AuthenticatedCarbonRouteImport.update({
+  id: '/carbon',
+  path: '/carbon',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedClimateRoute = AuthenticatedClimateRouteImport.update({
+  id: '/climate',
+  path: '/climate',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedCommunityRoute = AuthenticatedCommunityRouteImport.update({
+  id: '/community',
+  path: '/community',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedDebtFreeRoute = AuthenticatedDebtFreeRouteImport.update({
+  id: '/debt-free',
+  path: '/debt-free',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedForumRoute = AuthenticatedForumRouteImport.update({
+  id: '/forum',
+  path: '/forum',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedJournalRoute = AuthenticatedJournalRouteImport.update({
+  id: '/journal',
+  path: '/journal',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedKendraRoute = AuthenticatedKendraRouteImport.update({
+  id: '/kendra',
+  path: '/kendra',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedKharchRoute = AuthenticatedKharchRouteImport.update({
+  id: '/kharch',
+  path: '/kharch',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedKhetbazaarRoute = AuthenticatedKhetbazaarRouteImport.update({
+  id: '/khetbazaar',
+  path: '/khetbazaar',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedKrishikarzRoute = AuthenticatedKrishikarzRouteImport.update({
+  id: '/krishikarz',
+  path: '/krishikarz',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedLabourRoute = AuthenticatedLabourRouteImport.update({
+  id: '/labour',
+  path: '/labour',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedMandiBhavRoute = AuthenticatedMandiBhavRouteImport.update({
+  id: '/mandi-bhav',
+  path: '/mandi-bhav',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedMandiMitraRoute = AuthenticatedMandiMitraRouteImport.update({
+  id: '/mandi-mitra',
+  path: '/mandi-mitra',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPaaniRoute = AuthenticatedPaaniRouteImport.update({
+  id: '/paani',
+  path: '/paani',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedScanRoute = AuthenticatedScanRouteImport.update({
+  id: '/scan',
+  path: '/scan',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedSchemesRoute = AuthenticatedSchemesRouteImport.update({
+  id: '/schemes',
+  path: '/schemes',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedSideIncomeRoute = AuthenticatedSideIncomeRouteImport.update({
+  id: '/side-income',
+  path: '/side-income',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedSoilRoute = AuthenticatedSoilRouteImport.update({
+  id: '/soil',
+  path: '/soil',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedWeatherHistoryRoute =
@@ -63,114 +168,9 @@ const AuthenticatedWeatherHistoryRoute =
     path: '/weather-history',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedSoilRoute = AuthenticatedSoilRouteImport.update({
-  id: '/soil',
-  path: '/soil',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedSideIncomeRoute = AuthenticatedSideIncomeRouteImport.update({
-  id: '/side-income',
-  path: '/side-income',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedSchemesRoute = AuthenticatedSchemesRouteImport.update({
-  id: '/schemes',
-  path: '/schemes',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedScanRoute = AuthenticatedScanRouteImport.update({
-  id: '/scan',
-  path: '/scan',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedPaaniRoute = AuthenticatedPaaniRouteImport.update({
-  id: '/paani',
-  path: '/paani',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedMandiMitraRoute = AuthenticatedMandiMitraRouteImport.update({
-  id: '/mandi-mitra',
-  path: '/mandi-mitra',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedMandiBhavRoute = AuthenticatedMandiBhavRouteImport.update({
-  id: '/mandi-bhav',
-  path: '/mandi-bhav',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedLabourRoute = AuthenticatedLabourRouteImport.update({
-  id: '/labour',
-  path: '/labour',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedKrishikarzRoute = AuthenticatedKrishikarzRouteImport.update({
-  id: '/krishikarz',
-  path: '/krishikarz',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedKhetbazaarRoute = AuthenticatedKhetbazaarRouteImport.update({
-  id: '/khetbazaar',
-  path: '/khetbazaar',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedKharchRoute = AuthenticatedKharchRouteImport.update({
-  id: '/kharch',
-  path: '/kharch',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedKendraRoute = AuthenticatedKendraRouteImport.update({
-  id: '/kendra',
-  path: '/kendra',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedJournalRoute = AuthenticatedJournalRouteImport.update({
-  id: '/journal',
-  path: '/journal',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedForumRoute = AuthenticatedForumRouteImport.update({
-  id: '/forum',
-  path: '/forum',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedDebtFreeRoute = AuthenticatedDebtFreeRouteImport.update({
-  id: '/debt-free',
-  path: '/debt-free',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedCommunityRoute = AuthenticatedCommunityRouteImport.update({
-  id: '/community',
-  path: '/community',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedClimateRoute = AuthenticatedClimateRouteImport.update({
-  id: '/climate',
-  path: '/climate',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedCarbonRoute = AuthenticatedCarbonRouteImport.update({
-  id: '/carbon',
-  path: '/carbon',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedCalendarRoute = AuthenticatedCalendarRouteImport.update({
-  id: '/calendar',
-  path: '/calendar',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedBeejRoute = AuthenticatedBeejRouteImport.update({
-  id: '/beej',
-  path: '/beej',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedAppRoute = AuthenticatedAppRouteImport.update({
-  id: '/app',
-  path: '/app',
+const AuthenticatedYieldRoute = AuthenticatedYieldRouteImport.update({
+  id: '/yield',
+  path: '/yield',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedScanIdRoute = AuthenticatedScanIdRouteImport.update({
@@ -367,11 +367,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -381,165 +381,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/yield': {
-      id: '/_authenticated/yield'
-      path: '/yield'
-      fullPath: '/yield'
-      preLoaderRoute: typeof AuthenticatedYieldRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/weather-history': {
-      id: '/_authenticated/weather-history'
-      path: '/weather-history'
-      fullPath: '/weather-history'
-      preLoaderRoute: typeof AuthenticatedWeatherHistoryRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/soil': {
-      id: '/_authenticated/soil'
-      path: '/soil'
-      fullPath: '/soil'
-      preLoaderRoute: typeof AuthenticatedSoilRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/side-income': {
-      id: '/_authenticated/side-income'
-      path: '/side-income'
-      fullPath: '/side-income'
-      preLoaderRoute: typeof AuthenticatedSideIncomeRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/settings': {
-      id: '/_authenticated/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/schemes': {
-      id: '/_authenticated/schemes'
-      path: '/schemes'
-      fullPath: '/schemes'
-      preLoaderRoute: typeof AuthenticatedSchemesRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/scan': {
-      id: '/_authenticated/scan'
-      path: '/scan'
-      fullPath: '/scan'
-      preLoaderRoute: typeof AuthenticatedScanRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/paani': {
-      id: '/_authenticated/paani'
-      path: '/paani'
-      fullPath: '/paani'
-      preLoaderRoute: typeof AuthenticatedPaaniRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/mandi-mitra': {
-      id: '/_authenticated/mandi-mitra'
-      path: '/mandi-mitra'
-      fullPath: '/mandi-mitra'
-      preLoaderRoute: typeof AuthenticatedMandiMitraRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/mandi-bhav': {
-      id: '/_authenticated/mandi-bhav'
-      path: '/mandi-bhav'
-      fullPath: '/mandi-bhav'
-      preLoaderRoute: typeof AuthenticatedMandiBhavRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/labour': {
-      id: '/_authenticated/labour'
-      path: '/labour'
-      fullPath: '/labour'
-      preLoaderRoute: typeof AuthenticatedLabourRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/krishikarz': {
-      id: '/_authenticated/krishikarz'
-      path: '/krishikarz'
-      fullPath: '/krishikarz'
-      preLoaderRoute: typeof AuthenticatedKrishikarzRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/khetbazaar': {
-      id: '/_authenticated/khetbazaar'
-      path: '/khetbazaar'
-      fullPath: '/khetbazaar'
-      preLoaderRoute: typeof AuthenticatedKhetbazaarRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/kharch': {
-      id: '/_authenticated/kharch'
-      path: '/kharch'
-      fullPath: '/kharch'
-      preLoaderRoute: typeof AuthenticatedKharchRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/kendra': {
-      id: '/_authenticated/kendra'
-      path: '/kendra'
-      fullPath: '/kendra'
-      preLoaderRoute: typeof AuthenticatedKendraRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/journal': {
-      id: '/_authenticated/journal'
-      path: '/journal'
-      fullPath: '/journal'
-      preLoaderRoute: typeof AuthenticatedJournalRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/forum': {
-      id: '/_authenticated/forum'
-      path: '/forum'
-      fullPath: '/forum'
-      preLoaderRoute: typeof AuthenticatedForumRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/debt-free': {
-      id: '/_authenticated/debt-free'
-      path: '/debt-free'
-      fullPath: '/debt-free'
-      preLoaderRoute: typeof AuthenticatedDebtFreeRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/community': {
-      id: '/_authenticated/community'
-      path: '/community'
-      fullPath: '/community'
-      preLoaderRoute: typeof AuthenticatedCommunityRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/climate': {
-      id: '/_authenticated/climate'
-      path: '/climate'
-      fullPath: '/climate'
-      preLoaderRoute: typeof AuthenticatedClimateRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/carbon': {
-      id: '/_authenticated/carbon'
-      path: '/carbon'
-      fullPath: '/carbon'
-      preLoaderRoute: typeof AuthenticatedCarbonRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/calendar': {
-      id: '/_authenticated/calendar'
-      path: '/calendar'
-      fullPath: '/calendar'
-      preLoaderRoute: typeof AuthenticatedCalendarRouteImport
+    '/_authenticated/app': {
+      id: '/_authenticated/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AuthenticatedAppRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/beej': {
@@ -549,11 +402,158 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBeejRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/app': {
-      id: '/_authenticated/app'
-      path: '/app'
-      fullPath: '/app'
-      preLoaderRoute: typeof AuthenticatedAppRouteImport
+    '/_authenticated/calendar': {
+      id: '/_authenticated/calendar'
+      path: '/calendar'
+      fullPath: '/calendar'
+      preLoaderRoute: typeof AuthenticatedCalendarRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/carbon': {
+      id: '/_authenticated/carbon'
+      path: '/carbon'
+      fullPath: '/carbon'
+      preLoaderRoute: typeof AuthenticatedCarbonRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/climate': {
+      id: '/_authenticated/climate'
+      path: '/climate'
+      fullPath: '/climate'
+      preLoaderRoute: typeof AuthenticatedClimateRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/community': {
+      id: '/_authenticated/community'
+      path: '/community'
+      fullPath: '/community'
+      preLoaderRoute: typeof AuthenticatedCommunityRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/debt-free': {
+      id: '/_authenticated/debt-free'
+      path: '/debt-free'
+      fullPath: '/debt-free'
+      preLoaderRoute: typeof AuthenticatedDebtFreeRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/forum': {
+      id: '/_authenticated/forum'
+      path: '/forum'
+      fullPath: '/forum'
+      preLoaderRoute: typeof AuthenticatedForumRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/journal': {
+      id: '/_authenticated/journal'
+      path: '/journal'
+      fullPath: '/journal'
+      preLoaderRoute: typeof AuthenticatedJournalRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/kendra': {
+      id: '/_authenticated/kendra'
+      path: '/kendra'
+      fullPath: '/kendra'
+      preLoaderRoute: typeof AuthenticatedKendraRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/kharch': {
+      id: '/_authenticated/kharch'
+      path: '/kharch'
+      fullPath: '/kharch'
+      preLoaderRoute: typeof AuthenticatedKharchRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/khetbazaar': {
+      id: '/_authenticated/khetbazaar'
+      path: '/khetbazaar'
+      fullPath: '/khetbazaar'
+      preLoaderRoute: typeof AuthenticatedKhetbazaarRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/krishikarz': {
+      id: '/_authenticated/krishikarz'
+      path: '/krishikarz'
+      fullPath: '/krishikarz'
+      preLoaderRoute: typeof AuthenticatedKrishikarzRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/labour': {
+      id: '/_authenticated/labour'
+      path: '/labour'
+      fullPath: '/labour'
+      preLoaderRoute: typeof AuthenticatedLabourRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/mandi-bhav': {
+      id: '/_authenticated/mandi-bhav'
+      path: '/mandi-bhav'
+      fullPath: '/mandi-bhav'
+      preLoaderRoute: typeof AuthenticatedMandiBhavRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/mandi-mitra': {
+      id: '/_authenticated/mandi-mitra'
+      path: '/mandi-mitra'
+      fullPath: '/mandi-mitra'
+      preLoaderRoute: typeof AuthenticatedMandiMitraRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/paani': {
+      id: '/_authenticated/paani'
+      path: '/paani'
+      fullPath: '/paani'
+      preLoaderRoute: typeof AuthenticatedPaaniRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/scan': {
+      id: '/_authenticated/scan'
+      path: '/scan'
+      fullPath: '/scan'
+      preLoaderRoute: typeof AuthenticatedScanRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/schemes': {
+      id: '/_authenticated/schemes'
+      path: '/schemes'
+      fullPath: '/schemes'
+      preLoaderRoute: typeof AuthenticatedSchemesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/side-income': {
+      id: '/_authenticated/side-income'
+      path: '/side-income'
+      fullPath: '/side-income'
+      preLoaderRoute: typeof AuthenticatedSideIncomeRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/soil': {
+      id: '/_authenticated/soil'
+      path: '/soil'
+      fullPath: '/soil'
+      preLoaderRoute: typeof AuthenticatedSoilRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/weather-history': {
+      id: '/_authenticated/weather-history'
+      path: '/weather-history'
+      fullPath: '/weather-history'
+      preLoaderRoute: typeof AuthenticatedWeatherHistoryRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/yield': {
+      id: '/_authenticated/yield'
+      path: '/yield'
+      fullPath: '/yield'
+      preLoaderRoute: typeof AuthenticatedYieldRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/scan/$id': {
